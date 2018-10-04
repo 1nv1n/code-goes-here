@@ -1,9 +1,48 @@
+<!-- HTML5 Doc Type -->
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-  </body>
+
+<head>
+  <!-- HTML5 META Tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="CodeGoesHere">
+  <meta name="author" content="1nv1n">
+
+  <title>CodeGoesHere</title>
+
+  <!-- Bulma! -->
+  <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css">
+  <!-- App CSS -->
+  <link rel="stylesheet" href="./app.css">
+  <!-- Monaco CSS -->
+  <link rel="stylesheet" href="./monaco/monaco.css">
+
+  <!-- Font Awesome! -->
+  <script defer src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+
+  <!-- Monaco Editor -->
+  <script defer src="./monaco/monaco-description.js"></script>
+  <script defer src="./monaco/monaco-code.js"></script>
+</head>
+
+<body>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item">
+        Code Goes Here
+      </a>
+    </div>
+  </nav>
+
+  <div class="columns">
+    <div class="column is-4">
+      <div id="monDescEditor" class="monaco-editor"></div>
+    </div>
+    <div class="column">
+      <div id="monCodeEditor" class="monaco-editor"></div>
+    </div>
+  </div>
+</body>
+
 </html>
