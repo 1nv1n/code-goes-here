@@ -39,4 +39,4 @@ Code Goes Here is intended to be a one-stop solution for writing, executing & ev
  - [x] Initialize Electron application using Electron Forge.
 
 ## Work-In-Progress Screenshot
-![code-supposed-to-go-here](https://i.imgur.com/4XpCVZ2.png)
+![code-supposed-to-go-here](https://i.imgur.com/MNHDOGq.png)

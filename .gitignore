@@ -1,2 +1,8 @@
+# Ignore API Properties
+src/jdoodle/credentials.js
+
+# Ignore Dependencies
 node_modules
+
+# Ignore Build Directories
 out

@@ -18,29 +18,95 @@
   <!-- Monaco CSS -->
   <link rel="stylesheet" href="./monaco/monaco.css">
 
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
   <!-- Font Awesome! -->
   <script defer src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
 
+  <!-- Renderer -->
+  <script defer src="./renderer/renderer.js"></script>
   <!-- Monaco Editor -->
   <script defer src="./monaco/monaco-description.js"></script>
   <script defer src="./monaco/monaco-code.js"></script>
 </head>
 
 <body>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <nav class="navbar nav-goes-here" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item">
+      <a class="navbar-item has-text-black navbar-item-text">
         Code Goes Here
       </a>
     </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <p class="buttons">
+          <a class="button is-small is-white" style="background-color: #404040;" onclick="minimizeApp()">
+            <span class="icon is-small">
+              <i class="far fa-window-minimize"></i>
+            </span>
+          </a>
+          <a class="button is-small is-white" style="background-color: #404040;" onclick="maximizeApp()">
+            <span class="icon is-small">
+              <i class="far fa-window-maximize"></i>
+            </span>
+          </a>
+          <a class="button is-small is-white" style="background-color: #404040;" onclick="closeApp()">
+            <span class="icon is-small is-danger">
+              <i class="fas fa-window-close"></i>
+            </span>
+          </a>
+        </p>
+      </div>
+    </div>
   </nav>
 
-  <div class="columns">
+  <div class="columns main-collumns">
     <div class="column is-4">
+      <button class="button is-small is-black" onClick="">
+        <span class="icon is-small">
+          <i class="fas fa-save"></i>
+        </span>
+      </button>
       <div id="monDescEditor" class="monaco-editor"></div>
     </div>
     <div class="column">
+      <button id="executeCodeButton" class="button is-small is-success" onClick="sendCodeForExecution()">
+        <span class="icon is-small">
+          <i class="fas fa-play"></i>
+        </span>
+      </button>
+      <button class="button is-small is-info" onClick="openLanguageModal()">
+        <span class="icon is-small">
+          <i class="fas fa-language"></i>
+        </span>
+      </button>
       <div id="monCodeEditor" class="monaco-editor"></div>
+    </div>
+  </div>
+
+  <!-- Language Selection Modal -->
+  <div id="languageModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Select Language</p>
+        <button class="delete" aria-label="close" onClick="closeLanguageModal()"></button>
+      </header>
+      <section id="languageModalContent" class="modal-card-body"></section>
+    </div>
+  </div>
+
+  <!-- Compiled Output Modal -->
+  <div id="outputModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Compiled Output</p>
+        <button class="delete is-danger" aria-label="close" onClick="closeOutputModal()"></button>
+      </header>
+      <section id="outputModalContent" class="modal-card-body"></section>
     </div>
   </div>
 </body>

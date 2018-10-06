@@ -1,35 +1,129 @@
+// Import the supported languages
+const languageArr = require("./jdoodle/languages");
+
+// Define the Monaco & the Code Editor
+let monacoEditor;
+let codeEditor;
+
+// Placeholder for the current language
+let currLang = ["java", "Java (JDK 1.8.0_66)", "0", "java"];
+
+/**
+ * Send the code to the renderer to be sent to the main process for execution.
+ */
+function sendCodeForExecution() {
+  document.getElementById("executeCodeButton").classList.add("is-loading");
+  sendCodeToMainProcess(codeEditor.getValue(), currLang[0], currLang[2]);
+}
+
+/**
+ * Create the wrapping "tags" div for a collection of tags.
+ */
+function createWrappingDiv() {
+  const outerDiv = document.createElement("div");
+  outerDiv.id = "languageButtonsDiv";
+  outerDiv.classList.add("buttons");
+
+  return outerDiv;
+}
+
+/**
+ * Create a span button per language.
+ * @param {*} language
+ */
+function createLanguageButton(language) {
+  const span = document.createElement("span");
+  span.classList.add("button");
+  span.classList.add("is-small");
+  span.classList.add("is-rounded");
+  span.classList.add("is-link");
+  span.innerHTML = language[1];
+  span.onclick = () => { updateLanguage(language); };
+
+  return span;
+}
+
+/**
+ * Populate languages in the modal.
+ */
+function populateLanguages() {
+  const wrappingTagsDiv = createWrappingDiv();
+  Object.keys(languageArr).forEach((key) => {
+    const languageTag = createLanguageButton(languageArr[key]);
+    wrappingTagsDiv.appendChild(languageTag);
+  });
+  document.getElementById("languageModalContent").appendChild(wrappingTagsDiv);
+}
+
+/**
+ * Initialize & open the modal for language selection.
+ */
+function openLanguageModal() {
+  // Populate languages only if we haven't already done so.
+  if (document.getElementById("languageButtonsDiv") === null) {
+    populateLanguages();
+  }
+
+  document.getElementById("languageModal").classList.add("is-active");
+  document.documentElement.classList.add("is-clipped");
+}
+
+/**
+ * Close the language selection modal.
+ */
+function closeLanguageModal() {
+  document.getElementById("languageModal").classList.remove("is-active");
+  document.documentElement.classList.remove("is-clipped");
+}
+
+/**
+ * Update the language of the code editor.
+ * @param {*} language
+ */
+function updateLanguage(language) {
+  currLang = language;
+  monacoEditor.setModelLanguage(codeEditor.getModel(), language[3]);
+  closeLanguageModal();
+}
+
+/**
+ * Initialize the Monaco Code Editor.
+ */
 (function () {
-  const path = require('path');
-  const amdLoader = require('../node_modules/monaco-editor/min/vs/loader.js');
+  const path = require("path");
+  const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
   const amdRequire = amdLoader.require;
   const amdDefine = amdLoader.require.define;
 
   function uriFromPath(_path) {
-    let pathName = path.resolve(_path).replace(/\\/g, '/');
-    if (pathName.length > 0 && pathName.charAt(0) !== '/') {
-      pathName = '/' + pathName;
+    let pathName = path.resolve(_path).replace(/\\/g, "/");
+    if (pathName.length > 0 && pathName.charAt(0) !== "/") {
+      pathName = "/" + pathName;
     }
-    return encodeURI('file://' + pathName);
+    return encodeURI("file://" + pathName);
   }
 
   amdRequire.config({
-    baseUrl: uriFromPath(path.join(__dirname, '../node_modules/monaco-editor/min')),
+    baseUrl: uriFromPath(path.join(__dirname, "../node_modules/monaco-editor/min")),
   });
 
-  // workaround monaco-css not understanding the environment
+  // Workaround for monaco-css not understanding the environment
   self.module = undefined;
 
-  amdRequire(['vs/editor/editor.main'], function () {
-    let editor = monaco.editor.create(document.getElementById('monCodeEditor'), {
+  amdRequire(["vs/editor/editor.main"], function () {
+    monacoEditor = monaco.editor;
+    codeEditor = monaco.editor.create(document.getElementById("monCodeEditor"), {
       automaticLayout: true, // This incurs some performance cost
       value: [
-        'public void greet() {',
-        '\tSystem.out.println("Hello from Monaco!");',
-        '}',
-      ].join('\n'),
-      language: 'java',
+        "public class CodeGoesHere {",
+        "\tpublic static void main(String[] args) {",
+        "\t\tSystem.out.println(\"Hello from Monaco!\");",
+        "\t}",
+        "}",
+      ].join("\n"),
+      language: currLang[3],
       scrollBeyondLastLine: false,
-      theme: 'vs-dark',
+      theme: "vs-dark",
     });
   });
 })();
