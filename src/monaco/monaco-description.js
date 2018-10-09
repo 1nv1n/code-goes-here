@@ -1,4 +1,4 @@
-// Define the Monaco & the Code Editor
+// Define the editor objects
 let monacoDescEditor;
 let descEditor;
 

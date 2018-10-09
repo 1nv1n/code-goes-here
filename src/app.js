@@ -1,4 +1,6 @@
-import { app, ipcMain, dialog, screen, BrowserWindow } from "electron";
+import {
+  app, ipcMain, dialog, screen, BrowserWindow,
+} from "electron";
 import { enableLiveReload } from "electron-compile";
 
 enableLiveReload();

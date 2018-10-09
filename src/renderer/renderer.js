@@ -36,11 +36,7 @@ function closeApp() {
  */
 function download() {
   document.getElementById("downloadButton").classList.add("is-loading");
-
-  const probDescLink = document.getElementById("probDescInput").value;
-  const solutionLink = document.getElementById("solutionInput").value;
-
-  ipcRenderer.send("download", probDescLink, solutionLink);
+  ipcRenderer.send("download", document.getElementById("probDescInput").value, document.getElementById("solutionInput").value);
 }
 
 /**

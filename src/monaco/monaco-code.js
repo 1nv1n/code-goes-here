@@ -1,7 +1,7 @@
 // Import the supported languages
 const languageArr = require("./jdoodle/languages");
 
-// Define the Monaco & the Code Editor
+// Define the editor objects
 let monacoCodeEditor;
 let codeEditor;
 
