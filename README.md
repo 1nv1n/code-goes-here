@@ -30,8 +30,10 @@ Code Goes Here is intended to be a one-stop solution for writing, executing & ev
  - [ ] "File Browser" like functionality to see & categorize (folders) solutions & offer advanced local Git as well as GitHub integration.
  - [ ] Provision a "snippets" system that allows for user-defined snippets & code (commonly used methods) to be pulled in at will to avoid write-duplication.
  - [ ] Create a tags system to allow for problems & solutions to be tagged (user-defined (eg: easy, hard, leet, tree, graph, array, etc.))
- - [ ] Basic compiler provision (JDoodle as example - allow for any third-party compilers to be used).
+ - [ ] Advanced/multiple third-party compiler integration.
+ - [x] Basic compiler provision (JDoodle).
  - [ ] Basic GitHub integration (Commit to provided repository).
+ - [x] Basic HTTP "download" of description & solution (eg: Raw content from GitHub).
  - [x] Set basic code editor.
  - [x] Set basic description editor.
  - [x] Pull in the Monaco Editor.
@@ -39,4 +41,4 @@ Code Goes Here is intended to be a one-stop solution for writing, executing & ev
  - [x] Initialize Electron application using Electron Forge.
 
 ## Work-In-Progress Screenshot
-![code-supposed-to-go-here](https://i.imgur.com/MNHDOGq.png)
+![code-supposed-to-go-here](https://i.imgur.com/mDOczNB.png)
