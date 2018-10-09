@@ -16,14 +16,13 @@ Code Goes Here is intended to be a one-stop solution for writing, executing & ev
    * Could include examples, sample input(s)/output(s), notes, etc.
    * Could use https://github.com/markdown-it/markdown-it for preview purposes.
  * Monaco editor for problem solution.
-   * Use all the features from the code editor that powers Visual Studio Code.
-   * Should provide language preference options.
+   * Use all the features (including language support) from the editor that powers Visual Studio Code.
  * GitHub integration (user setup required)
    * Problem & solution should be uploadable onto a provided GitHub repository.
-   * Problem & solution set should be downloadable from the provided GitHub for coding improvements.
+   * Problem & solution set should be downloadable from the provided GitHub.
  * Code execution (user setup required)
    * Solution should be able to be run on (free/paid) third-party online compilers.
-   * This should provide the user the expected output (maybe in a separate dialog) as well as CPU compute time or any other metrics that the compiler can provide.
+   * This should provide the user the expected output as well as compute metrics (CPU, memory usage).
    * Example: https://www.jdoodle.com/
 
 ## Task List Status
