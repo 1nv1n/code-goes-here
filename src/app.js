@@ -21,7 +21,7 @@ const createWindow = () => {
     frame: false,
     height: screen.getPrimaryDisplay().workAreaSize.height - 50,
     show: false,
-    titleBarStyle: "hidden-inset",
+    titleBarStyle: "hidden",
     toolbar: false,
     width: screen.getPrimaryDisplay().workAreaSize.width - 50,
   });
@@ -29,8 +29,11 @@ const createWindow = () => {
   // And load the main HTML of the app.
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
+  // Disable the menu
+  mainWindow.setMenu(null);
+
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
