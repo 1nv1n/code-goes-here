@@ -10,6 +10,7 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
 
 // JS Imports
 const compileJS = require("./jdoodle/compile");
+const gHRetrieveJS = require("./github/gHRetrieve");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -81,14 +82,7 @@ ipcMain.on("execute-code", (event, editorText, language, versionIdx) => {
   };
 
   compilePromise.then((result) => {
-    messageBoxProp.message = "Status Code: "
-      + result.statusCode
-      + ". Memory: "
-      + result.memory
-      + ". CPU Time: "
-      + result.cpuTime
-      + ". Output: "
-      + result.output;
+    messageBoxProp.message = `Status Code: ${result.statusCode}. Memory: ${result.memory}. CPU Time: ${result.cpuTime}. Output: ${result.output}`;
     dialog.showMessageBox(messageBoxProp);
     mainWindow.webContents.send("compiled", 1);
   }, (err) => {
@@ -96,5 +90,11 @@ ipcMain.on("execute-code", (event, editorText, language, versionIdx) => {
     messageBoxProp.buttons = ["Well, okay then..."];
     dialog.showMessageBox(messageBoxProp);
     mainWindow.webContents.send("compiled", 0);
+  });
+});
+
+ipcMain.on("download", (event, descLink, solutionLink) => {
+  Promise.all([gHRetrieveJS.retrieveContent(descLink), gHRetrieveJS.retrieveContent(solutionLink)]).then((values) => {
+    mainWindow.webContents.send("downloaded", values);
   });
 });

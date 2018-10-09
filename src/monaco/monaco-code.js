@@ -2,7 +2,7 @@
 const languageArr = require("./jdoodle/languages");
 
 // Define the Monaco & the Code Editor
-let monacoEditor;
+let monacoCodeEditor;
 let codeEditor;
 
 // Placeholder for the current language
@@ -17,6 +17,15 @@ function sendCodeForExecution() {
 }
 
 /**
+ * Update the editor's existing value with the update.
+ *
+ * @param {String} code
+ */
+function updateCode(code) {
+  codeEditor.setValue(code);
+}
+
+/**
  * Create the wrapping "tags" div for a collection of tags.
  */
 function createWrappingDiv() {
@@ -25,6 +34,24 @@ function createWrappingDiv() {
   outerDiv.classList.add("buttons");
 
   return outerDiv;
+}
+
+/**
+ * Close the language selection modal.
+ */
+function closeLanguageModal() {
+  document.getElementById("languageModal").classList.remove("is-active");
+  document.documentElement.classList.remove("is-clipped");
+}
+
+/**
+ * Update the language of the code editor.
+ * @param {*} language
+ */
+function updateLanguage(language) {
+  currLang = language;
+  monacoCodeEditor.setModelLanguage(codeEditor.getModel(), language[3]);
+  closeLanguageModal();
 }
 
 /**
@@ -69,27 +96,9 @@ function openLanguageModal() {
 }
 
 /**
- * Close the language selection modal.
- */
-function closeLanguageModal() {
-  document.getElementById("languageModal").classList.remove("is-active");
-  document.documentElement.classList.remove("is-clipped");
-}
-
-/**
- * Update the language of the code editor.
- * @param {*} language
- */
-function updateLanguage(language) {
-  currLang = language;
-  monacoEditor.setModelLanguage(codeEditor.getModel(), language[3]);
-  closeLanguageModal();
-}
-
-/**
  * Initialize the Monaco Code Editor.
  */
-(function () {
+(function initMonacoEditor() {
   const path = require("path");
   const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
   const amdRequire = amdLoader.require;
@@ -111,7 +120,7 @@ function updateLanguage(language) {
   self.module = undefined;
 
   amdRequire(["vs/editor/editor.main"], function () {
-    monacoEditor = monaco.editor;
+    monacoCodeEditor = monaco.editor;
     codeEditor = monaco.editor.create(document.getElementById("monCodeEditor"), {
       automaticLayout: true, // This incurs some performance cost
       value: [
