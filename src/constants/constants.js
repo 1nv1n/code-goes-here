@@ -5,5 +5,6 @@ function define(name, value) {
   });
 }
 
-// JDoodle API
-define("API", "https://api.jdoodle.com/execute");
+// App Constants
+define("HTTP_GET", "GET");
+define("HTTP_POST", "POST");

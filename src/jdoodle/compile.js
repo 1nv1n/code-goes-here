@@ -1,4 +1,5 @@
 const reqPromise = require("request-promise");
+const constants = require("./../constants/constants");
 const apiConstants = require("./apiConstants");
 const jDoodleCredentials = require("./credentials");
 
@@ -14,7 +15,7 @@ module.exports = {
 
     const options = {
       url: apiConstants.API,
-      method: apiConstants.HTTP_POST,
+      method: constants.HTTP_POST,
       json: program,
     };
 
