@@ -8,6 +8,27 @@ Code Goes Here is intended to be a one-stop solution for writing, executing & ev
  * Bulma (https://bulma.io)
  * Monaco Editor (https://github.com/Microsoft/monaco-editor)
 
+## Usage
+ * Install nodejs (https://nodejs.org/en/download/)
+ * Install Electron Forge (npm install -g electron-forge)
+ * git clone https://github.com/1nv1n/code-goes-here.git
+ * Create file "credentials.js" in directory: "code-goes-here\src\jdoodle" with the following content (replace the placeholders with your versions after registering at: https://www.jdoodle.com/faq):
+ ```javascript
+function define(name, value) {
+    Object.defineProperty(exports, name, {
+      value: value,
+      enumerable: true,
+    });
+  }
+
+  // JDoodle Credentials
+  define("CLIENT_ID", "YOUR_CLIENT_ID_HERE");
+  define("CLIENT_SECRET", "YOUR_CLIENT_SECRET_HERE");
+```
+ * From the root directory (code-goes-here); run:
+   * `npm install`
+   * `npm start`
+
 ## Goals & Features
 
  * Monaco editor for problem description.
