@@ -4,19 +4,16 @@ const apiConstants = require("./apiConstants");
 const jDoodleCredentials = require("./credentials");
 
 module.exports = {
-  jDoodleCompile: function jDoodleCompile(editorText, language, versionIdx) {
-    const program = {
-      script: editorText,
-      language: language,
-      versionIndex: versionIdx,
+  jDoodleCreditSpent: function jDoodleCreditSpent() {
+    const inputParam = {
       clientId: jDoodleCredentials.CLIENT_ID,
       clientSecret: jDoodleCredentials.CLIENT_SECRET,
     };
 
     const options = {
-      url: apiConstants.v1 + apiConstants.execute,
+      url: apiConstants.v1 + apiConstants.creditSpent,
       method: constants.HTTP_POST,
-      json: program,
+      json: inputParam,
     };
 
     return reqPromise(options);

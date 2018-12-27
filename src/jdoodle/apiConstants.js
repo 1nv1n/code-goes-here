@@ -6,4 +6,6 @@ function define(name, value) {
 }
 
 // JDoodle API
-define("API", "https://api.jdoodle.com/execute");
+define("v1", "https://api.jdoodle.com/v1");
+define("execute", "/execute");
+define("creditSpent", "/credit-spent");

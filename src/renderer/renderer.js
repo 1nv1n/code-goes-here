@@ -66,6 +66,14 @@ function sendCodeToMainProcess(editorText, language, versionIdx) {
 }
 
 /**
+ * Check credit usage.
+ */
+function checkUsage() {
+  document.getElementById("checkUsageButton").classList.add("is-loading");
+  ipcRenderer.send("check-usage");
+}
+
+/**
  * Handle the "compiled" event.
  */
 ipcRenderer.on("compiled", (event, code) => {
@@ -86,4 +94,11 @@ ipcRenderer.on("downloaded", (event, values) => {
   }
 
   closeDownloadModal();
+});
+
+/**
+ * Handle the "check-usage" event.
+ */
+ipcRenderer.on("usage-checked", (event, code) => {
+  document.getElementById("checkUsageButton").classList.remove("is-loading");
 });

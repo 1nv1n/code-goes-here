@@ -12,6 +12,7 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
 
 // JS Imports
 const compileJS = require("./jdoodle/compile");
+const usageJS = require("./jdoodle/usage");
 const gHRetrieveJS = require("./github/gHRetrieve");
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -35,8 +36,8 @@ const createWindow = () => {
   // Disable the menu
   mainWindow.setMenu(null);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // Open DevTools on launch.
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
@@ -92,6 +93,28 @@ ipcMain.on("execute-code", (event, editorText, language, versionIdx) => {
     messageBoxProp.buttons = ["Well, okay then..."];
     dialog.showMessageBox(messageBoxProp);
     mainWindow.webContents.send("compiled", 0);
+  });
+});
+
+ipcMain.on("check-usage", (event) => {
+  const usageCheckPromise = usageJS.jDoodleCreditSpent();
+  const messageBoxProp = {
+    type: "info",
+    buttons: ["Cool"],
+    title: "Credit(s) Spent",
+    message: "",
+    detail: "",
+  };
+
+  usageCheckPromise.then((result) => {
+    messageBoxProp.message = `Used: ${result.used} Credit(s).`;
+    dialog.showMessageBox(messageBoxProp);
+    mainWindow.webContents.send("usage-checked", 1);
+  }, (err) => {
+    messageBoxProp.message = JSON.stringify(err);
+    messageBoxProp.buttons = ["Well, okay then..."];
+    dialog.showMessageBox(messageBoxProp);
+    mainWindow.webContents.send("usage-checked", 0);
   });
 });
 
