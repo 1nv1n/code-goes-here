@@ -25,6 +25,19 @@ function define(name, value) {
   define("CLIENT_ID", "YOUR_CLIENT_ID_HERE");
   define("CLIENT_SECRET", "YOUR_CLIENT_SECRET_HERE");
 ```
+ * Create file "credentials.js" in directory: "code-goes-here\src\github" with the following content (replace the placeholders with your versions after registering GitHub Developer Settings):
+ ```javascript
+function define(name, value) {
+    Object.defineProperty(exports, name, {
+      value: value,
+      enumerable: true,
+    });
+  }
+
+  // GitHub OAuth App Credentials
+  define("CLIENT_ID", "YOUR_CLIENT_ID_HERE");
+  define("CLIENT_SECRET", "YOUR_CLIENT_SECRET_HERE");
+```
  * From the root directory (code-goes-here); run:
    * `npm install`
    * `npm start`
