@@ -26,17 +26,6 @@ function updateCode(code) {
 }
 
 /**
- * Create the wrapping "tags" div for a collection of tags.
- */
-function createWrappingDiv() {
-  const outerDiv = document.createElement("div");
-  outerDiv.id = "languageButtonsDiv";
-  outerDiv.classList.add("buttons");
-
-  return outerDiv;
-}
-
-/**
  * Close the language selection modal.
  */
 function closeLanguageModal() {
@@ -59,14 +48,8 @@ function updateLanguage(language) {
  * @param {*} language
  */
 function createLanguageButton(language) {
-  const span = document.createElement("span");
-  span.classList.add("button");
-  span.classList.add("is-small");
-  span.classList.add("is-rounded");
-  span.classList.add("is-link");
-  span.innerHTML = language[1];
+  const span = createSpanButton(language[1])
   span.onclick = () => { updateLanguage(language); };
-
   return span;
 }
 
@@ -74,7 +57,7 @@ function createLanguageButton(language) {
  * Populate languages in the modal.
  */
 function populateLanguages() {
-  const wrappingTagsDiv = createWrappingDiv();
+  const wrappingTagsDiv = createWrappingDiv("languageButtonsDiv");
   Object.keys(languageArr).forEach((key) => {
     const languageTag = createLanguageButton(languageArr[key]);
     wrappingTagsDiv.appendChild(languageTag);
