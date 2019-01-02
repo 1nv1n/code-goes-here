@@ -12,6 +12,7 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
 
 // JS Imports
 const GitHubInstance = require("github-api");
+const fileSystem = require("fs");
 const compileJS = require("./jdoodle/compile");
 const usageJS = require("./jdoodle/usage");
 const gHRetrieveJS = require("./github/gHRetrieve");
@@ -129,6 +130,41 @@ ipcMain.on("check-usage", (event) => {
 ipcMain.on("download", (event, descLink, solutionLink) => {
   Promise.all([gHRetrieveJS.retrieveContent(descLink), gHRetrieveJS.retrieveContent(solutionLink)]).then((values) => {
     mainWindow.webContents.send("downloaded", values);
+  });
+});
+
+ipcMain.on("save-local", (event, descTxt, solTxt) => {
+  const options = {
+    title: "Save Problem Description",
+    defaultPath: app.getPath("documents") + "/ProblemDescription.md",
+  };
+
+  const messageBoxProp = {
+    type: "info",
+    buttons: ["OK"],
+    title: "Error",
+    message: "Failed To Save",
+    detail: "err",
+  };
+
+  dialog.showSaveDialog(null, options, (path) => {
+    try {
+      fileSystem.writeFileSync(path, descTxt, "utf-8");
+    } catch (err) {
+      messageBoxProp.detail = err;
+      dialog.showMessageBox(messageBoxProp);
+    }
+  });
+
+  options.title = "Save Problem Solution";
+  options.defaultPath = app.getPath("documents") + "/Solution";
+  dialog.showSaveDialog(null, options, (path) => {
+    try {
+      fileSystem.writeFileSync(path, solTxt, "utf-8");
+    } catch (err) {
+      messageBoxProp.detail = err;
+      dialog.showMessageBox(messageBoxProp);
+    }
   });
 });
 

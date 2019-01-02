@@ -41,6 +41,10 @@ function download() {
   ipcRenderer.send("download", document.getElementById("probDescInput").value, document.getElementById("solutionInput").value);
 }
 
+function saveLocal() {
+  ipcRenderer.send("save-local", descEditor.getValue(), codeEditor.getValue());
+}
+
 /**
  * Launch the download modal
  */
