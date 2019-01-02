@@ -39,20 +39,21 @@ function updateDesc(description) {
     monacoDescEditor = monaco.editor;
     descEditor = monaco.editor.create(document.getElementById("monDescEditor"), {
       automaticLayout: true, // This incurs some performance cost
+      language: "markdown",
+      lineNumbers: "off",
+      minimap: {
+        enabled: false,
+      },
+      renderWhitespace: "all",
+      roundedSelection: false,
+      scrollBeyondLastLine: false,
+      theme: "vs-dark",
       value: [
         "# Problem Description",
         "Create a greet function\n",
         "## Sample output",
         "Hello from Monaco!",
       ].join("\n"),
-      language: "markdown",
-      lineNumbers: "off",
-      minimap: {
-        enabled: false,
-      },
-      roundedSelection: false,
-      scrollBeyondLastLine: false,
-      theme: "vs-dark",
     });
   });
 })();

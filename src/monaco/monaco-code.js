@@ -106,6 +106,10 @@ function openLanguageModal() {
     monacoCodeEditor = monaco.editor;
     codeEditor = monaco.editor.create(document.getElementById("monCodeEditor"), {
       automaticLayout: true, // This incurs some performance cost
+      language: currLang[3],
+      renderWhitespace: "all",
+      scrollBeyondLastLine: false,
+      theme: "vs-dark",
       value: [
         "public class CodeGoesHere {",
         "\tpublic static void main(String[] args) {",
@@ -113,9 +117,6 @@ function openLanguageModal() {
         "\t}",
         "}",
       ].join("\n"),
-      language: currLang[3],
-      scrollBeyondLastLine: false,
-      theme: "vs-dark",
     });
   });
 })();
