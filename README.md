@@ -34,9 +34,8 @@ function define(name, value) {
     });
   }
 
-  // GitHub OAuth App Credentials
-  define("CLIENT_ID", "YOUR_CLIENT_ID_HERE");
-  define("CLIENT_SECRET", "YOUR_CLIENT_SECRET_HERE");
+  // GitHub Personal Access Token
+  define("TOKEN", "YOUR_TOKEN_HERE");
 ```
  * From the root directory (code-goes-here); run:
    * `npm install`
