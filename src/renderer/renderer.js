@@ -63,6 +63,7 @@ function closeDownloadModal() {
 function launchGitHubRepoModal() {
   document.getElementById("gitHubRepoModal").classList.add("is-active");
   document.documentElement.classList.add("is-clipped");
+  document.getElementById("gitHubRepoBackButton").innerHTML = "Close";
   ipcRenderer.send("list-repos");
 }
 
@@ -77,6 +78,34 @@ function closeGitHubRepoModal() {
 
   document.getElementById("gitHubRepoModal").classList.remove("is-active");
   document.documentElement.classList.remove("is-clipped");
+}
+
+/**
+ * Go back on the GitHub Repo. modal
+ */
+function backGitHubRepoModal() {
+  if (repoInfo.getRepoName() === "") {
+    closeGitHubRepoModal();
+    return;
+  }
+
+  if (repoInfo.getBranchRef() === "") {
+    document.getElementById("gitHubRepoModalContent").removeChild(document.getElementById("branchListDiv"));
+    ipcRenderer.send("list-repos");
+    repoInfo.setRepoName("");
+    document.getElementById("gitHubRepoBackButton").innerHTML = "Close";
+    return;
+  }
+
+  if (repoInfo.getDirPath().length === 0) {
+    document.getElementById("gitHubRepoModalContent").removeChild(document.getElementById("contentListDiv"));
+    repoInfo.setBranchRef("");
+    ipcRenderer.send("get-repo", repoInfo.getRepoUser(), repoInfo.getRepoName());
+  } else {
+    document.getElementById("gitHubRepoModalContent").removeChild(document.getElementById("contentListDiv"));
+    repoInfo.getDirPath().pop();
+    ipcRenderer.send("get-dir", repoInfo);
+  }
 }
 
 /**
@@ -162,7 +191,10 @@ function populateReposList(repoList) {
   const wrappingTagsDiv = createWrappingDiv("repoListDiv");
   Object.keys(repoList).forEach((key) => {
     const repoButton = createSpanButton(repoList[key].name);
-    repoButton.onclick = () => { getRepoContent(repoList[key].owner.login, repoList[key].name); };
+    repoButton.onclick = () => {
+      document.getElementById("gitHubRepoBackButton").innerHTML = "Back";
+      getRepoContent(repoList[key].owner.login, repoList[key].name);
+    };
     wrappingTagsDiv.appendChild(repoButton);
   });
   document.getElementById("gitHubRepoModalContent").appendChild(wrappingTagsDiv);
