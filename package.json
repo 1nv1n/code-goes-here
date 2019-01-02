@@ -64,10 +64,10 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.3.1",
-    "@octokit/rest": "^16.3.0",
     "bulma": "^0.7.1",
-    "electron-compile": "^6.4.3",
+    "electron-compile": "^6.4.4",
     "electron-squirrel-startup": "^1.0.0",
+    "github-api": "^3.0.0",
     "monaco-editor": "^0.15.6",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
@@ -78,10 +78,10 @@
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^5.2.2",
     "electron-prebuilt-compile": "3.0.10",
-    "eslint": "^5",
+    "eslint": "^5.11.1",
     "eslint-config-airbnb": "^17",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jsx-a11y": "^6",
-    "eslint-plugin-react": "^7"
+    "eslint-plugin-react": "^7.12.1"
   }
 }
