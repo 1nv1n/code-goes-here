@@ -18,7 +18,7 @@ export class Repository {
     this.repoName = repoName;
   }
 
-  geRepoName() {
+  getRepoName() {
     return this.repoName;
   }
 
