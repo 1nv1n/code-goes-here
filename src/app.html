@@ -65,17 +65,21 @@
             <i id="descColMinBtnIcon" class="fas fa-window-minimize"></i>
           </span>
         </button>
+        <button title="Clear Description" class="button is-small is-link" onClick="clearDesc()">
+          <span class="icon is-small">
+            <i class="far fa-trash-alt"></i>
+          </span>
+        </button>
         <button title="Direct Download" class="button is-small is-link" onClick="launchDownloadModal()">
           <span class="icon is-small">
             <i class="fas fa-download"></i>
           </span>
         </button>
-      </button>
-      <button title="GitHub Download" class="button is-small is-link" onClick="launchGitHubRepoModal()">
-        <span class="icon is-small">
-          <i class="fab fa-github"></i>
-        </span>
-      </button>
+        <button title="GitHub Download" class="button is-small is-link" onClick="launchGitHubRepoModal()">
+          <span class="icon is-small">
+            <i class="fab fa-github"></i>
+          </span>
+        </button>
         <button title="Local Save" class="button is-small is-link" onClick="saveLocal()">
           <span class="icon is-small">
             <i class="fas fa-save"></i>
@@ -87,6 +91,11 @@
         <button title="Minimize Column" class="button is-small is-link" onClick="minimizeColumnCode()" disabled>
           <span class="icon is-small">
             <i id="codeColMinBtnIcon" class="fas fa-window-minimize"></i>
+          </span>
+        </button>
+        <button title="Clear Solution" class="button is-small is-link" onClick="clearSol()">
+          <span class="icon is-small">
+            <i class="far fa-trash-alt"></i>
           </span>
         </button>
         <button title="Execute Code" id="executeCodeButton" class="button is-small is-success" onClick="sendCodeForExecution()">
@@ -148,14 +157,15 @@
         <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeDownloadModal()"></button>
       </header>
       <section id="downloadModalContent" class="modal-card-body">
-          <article class="message">
-              <div class="message-header">
-                <p>Usage</p>
-              </div>
-              <div class="message-body">
-                Input the full path the raw file containing the content to be downloaded for both, the problem description as well as the solution. eg: https://raw.githubusercontent.com/..desc.md
-              </div>
-            </article>
+        <article class="message">
+          <div class="message-header">
+            <p>Usage</p>
+          </div>
+          <div class="message-body">
+            Input the full path the raw file containing the content to be downloaded for both, the problem description
+            as well as the solution. eg: https://raw.githubusercontent.com/..desc.md
+          </div>
+        </article>
         <div class="field">
           <div class="control">
             <input id="probDescInput" class="input is-info" type="text" placeholder="Problem Description">

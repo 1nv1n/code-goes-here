@@ -41,8 +41,25 @@ function download() {
   ipcRenderer.send("download", document.getElementById("probDescInput").value, document.getElementById("solutionInput").value);
 }
 
+/**
+ * Save Description & Solution locally.
+ */
 function saveLocal() {
   ipcRenderer.send("save-local", descEditor.getValue(), codeEditor.getValue());
+}
+
+/**
+ * Clear the content of the description editor.
+ */
+function clearDesc() {
+  descEditor.setValue("");
+}
+
+/**
+ * Clear the content of the solution editor.
+ */
+function clearSol() {
+  codeEditor.setValue("");
 }
 
 /**
