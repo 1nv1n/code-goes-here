@@ -70,9 +70,9 @@ function launchGitHubRepoModal() {
  * Close the GitHub Repo. modal
  */
 function closeGitHubRepoModal() {
-  var gitHubModalNode = document.getElementById("gitHubRepoModalContent");
+  const gitHubModalNode = document.getElementById("gitHubRepoModalContent");
   while (gitHubModalNode.firstChild) {
-      gitHubModalNode.removeChild(gitHubModalNode.firstChild);
+    gitHubModalNode.removeChild(gitHubModalNode.firstChild);
   }
 
   document.getElementById("gitHubRepoModal").classList.remove("is-active");

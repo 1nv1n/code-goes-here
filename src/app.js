@@ -11,14 +11,14 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
 }
 
 // JS Imports
-const gitHubInstance = require('github-api');
+const GitHubInstance = require("github-api");
 const compileJS = require("./jdoodle/compile");
 const usageJS = require("./jdoodle/usage");
 const gHRetrieveJS = require("./github/gHRetrieve");
 const gitHubCredentials = require("./github/credentials");
 
-const gitHub = new gitHubInstance({
-  token: gitHubCredentials.TOKEN
+const gitHub = new GitHubInstance({
+  token: gitHubCredentials.TOKEN,
 });
 const gHUser = gitHub.getUser();
 let repository;
@@ -177,14 +177,18 @@ ipcMain.on("get-sol", (event, solLink) => {
 });
 
 function createComparator() {
-  return function(a, b) {
+  return function sortByName(a, b) {
     const nameA = a.name.trim().toLowerCase();
     const nameB = b.name.trim().toLowerCase();
 
     if (nameA < nameB) {
       return -1;
-    } else if (nameA > nameB) {
+    }
+
+    if (nameA > nameB) {
       return 1;
-    } else {return 0; }
+    }
+
+    return 0;
   };
 }
