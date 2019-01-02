@@ -77,9 +77,11 @@ function createContentRow(contentElement) {
 
     descButton.innerHTML = "<span class='icon is-small'><i class='fas fa-download'></i></span> &emsp; Description";
     descButton.onclick = () => { getDescriptionContent(contentElement.download_url); };
+    descButton.setAttribute("title", "Download/Set Description");
 
     solButton.innerHTML = "<span class='icon is-small'><i class='fas fa-download'></i></span> &emsp; Solution";
     solButton.onclick = () => { getSolutionContent(contentElement.download_url); };
+    solButton.setAttribute("title", "Download/Set Solution");
 
     iconCell.appendChild(elementButton);
     downloadCell.appendChild(descButton);

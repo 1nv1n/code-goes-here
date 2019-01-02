@@ -39,17 +39,17 @@
     <div id="drag-region" class="has-text-centered">
       <span>CodeGoesHere</span>
       <div class="buttons is-pulled-right titlebar-buttons">
-        <button class="button is-small is-link" onClick="minimizeApp()">
+        <button title="Minimize" class="button is-small is-link" onClick="minimizeApp()">
           <span class="icon is-small">
             <i class="fas fa-minus"></i>
           </span>
         </button>
-        <button class="button is-small is-link" onClick="maximizeApp()">
+        <button title="Maximize" class="button is-small is-link" onClick="maximizeApp()">
           <span class="icon is-small">
             <i id="maximizeAppBtnIcon" class="fas fa-square"></i>
           </span>
         </button>
-        <button class="button is-small is-link" onClick="closeApp()">
+        <button title="Quit/Close" class="button is-small is-link" onClick="closeApp()">
           <span class="icon is-small">
             <i class="fas fa-times"></i>
           </span>
@@ -60,23 +60,23 @@
   <div class="app-wrapper">
     <div class="columns column-wrapper">
       <div id="descColumn" class="column is-one-third mon-column desc-column">
-        <button class="button is-small is-link" onClick="minimizeColumnDesc()" disabled>
+        <button title="Minimize Column" class="button is-small is-link" onClick="minimizeColumnDesc()" disabled>
           <span class="icon is-small">
             <i id="descColMinBtnIcon" class="fas fa-window-minimize"></i>
           </span>
         </button>
-        <button class="button is-small is-link" onClick="launchDownloadModal()">
+        <button title="Direct Download" class="button is-small is-link" onClick="launchDownloadModal()">
           <span class="icon is-small">
             <i class="fas fa-download"></i>
           </span>
         </button>
       </button>
-      <button class="button is-small is-link" onClick="launchGitHubRepoModal()">
+      <button title="GitHub Download" class="button is-small is-link" onClick="launchGitHubRepoModal()">
         <span class="icon is-small">
           <i class="fab fa-github"></i>
         </span>
       </button>
-        <button class="button is-small is-link" onClick="" disabled>
+        <button title="Local Save" class="button is-small is-link" onClick="" disabled>
           <span class="icon is-small">
             <i class="fas fa-save"></i>
           </span>
@@ -84,22 +84,22 @@
         <div id="monDescEditor" class="monaco-editor"></div>
       </div>
       <div class="column mon-column code-column">
-        <button class="button is-small is-link" onClick="minimizeColumnCode()" disabled>
+        <button title="Minimize Column" class="button is-small is-link" onClick="minimizeColumnCode()" disabled>
           <span class="icon is-small">
             <i id="codeColMinBtnIcon" class="fas fa-window-minimize"></i>
           </span>
         </button>
-        <button id="executeCodeButton" class="button is-small is-success" onClick="sendCodeForExecution()">
+        <button title="Execute Code" id="executeCodeButton" class="button is-small is-success" onClick="sendCodeForExecution()">
           <span class="icon is-small">
             <i class="fas fa-play"></i>
           </span>
         </button>
-        <button class="button is-small is-link" onClick="openLanguageModal()">
+        <button title="Select Language" class="button is-small is-link" onClick="openLanguageModal()">
           <span class="icon is-small">
             <i class="fas fa-language"></i>
           </span>
         </button>
-        <button id="checkUsageButton" class="button is-small is-link" onClick="checkUsage()">
+        <button title="Check Compiler Usage" id="checkUsageButton" class="button is-small is-link" onClick="checkUsage()">
           <span class="icon is-small">
             <i class="fas fa-dollar-sign"></i>
           </span>
@@ -115,7 +115,7 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Supported Languages</p>
-        <button class="delete is-danger" aria-label="close" onClick="closeLanguageModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeLanguageModal()"></button>
       </header>
       <section id="languageModalContent" class="modal-card-body"></section>
       <footer class="modal-card-foot">
@@ -130,11 +130,11 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Compiled Output</p>
-        <button class="delete is-danger" aria-label="close" onClick="closeOutputModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeOutputModal()"></button>
       </header>
       <section id="outputModalContent" class="modal-card-body"></section>
       <footer class="modal-card-foot">
-        <button id="closeOutputModalButton" class="button is-link" onClick="closeOutputModal()">Close</button>
+        <button title="Close Modal" id="closeOutputModalButton" class="button is-link" onClick="closeOutputModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -145,7 +145,7 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Download</p>
-        <button class="delete is-danger" aria-label="close" onClick="closeDownloadModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeDownloadModal()"></button>
       </header>
       <section id="downloadModalContent" class="modal-card-body">
           <article class="message">
@@ -168,8 +168,8 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button id="downloadButton" class="button is-link" onClick="download()">Download</button>
-        <button id="closeDownloadModalButton" class="button is-link" onClick="closeDownloadModal()">Close</button>
+        <button title="Download Content" id="downloadButton" class="button is-link" onClick="download()">Download</button>
+        <button title="Close Modal" id="closeDownloadModalButton" class="button is-link" onClick="closeDownloadModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -180,14 +180,14 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p id="gitHubRepoModalTitleP" class="modal-card-title">GitHub Repositories</p>
-        <button class="delete is-danger" aria-label="close" onClick="closeGitHubRepoModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeGitHubRepoModal()"></button>
       </header>
       <section id="gitHubRepoModalBody" class="modal-card-body">
-        <button id="gitHubRepoLoadingButton" class="button is-loading">Loading</button>
+        <button title="Loading..." id="gitHubRepoLoadingButton" class="button is-loading">Loading...</button>
         <div id="gitHubRepoModalContent"></div>
       </section>
       <footer class="modal-card-foot">
-        <button id="gitHubRepoBackButton" class="button is-link" onClick="backGitHubRepoModal()">Close</button>
+        <button title="Close/Back" id="gitHubRepoBackButton" class="button is-link" onClick="backGitHubRepoModal()">Close</button>
       </footer>
     </div>
   </div>
