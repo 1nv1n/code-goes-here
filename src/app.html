@@ -28,6 +28,7 @@
   <!-- Common/Renderer -->
   <script defer src="./renderer/common.js"></script>
   <script defer src="./renderer/renderer.js"></script>
+
   <!-- Monaco Editor -->
   <script defer src="./monaco/monaco-description.js"></script>
   <script defer src="./monaco/monaco-code.js"></script>
@@ -69,6 +70,12 @@
             <i class="fas fa-download"></i>
           </span>
         </button>
+      </button>
+      <button class="button is-small is-link" onClick="launchGitHubRepoModal()">
+        <span class="icon is-small">
+          <i class="fab fa-github"></i>
+        </span>
+      </button>
         <button class="button is-small is-link" onClick="" disabled>
           <span class="icon is-small">
             <i class="fas fa-save"></i>
@@ -156,6 +163,23 @@
       </section>
       <footer class="modal-card-foot">
         <button id="downloadButton" class="button is-link" onClick="download()">Download</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- GitHub Repo. Modal -->
+  <div id="gitHubRepoModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p id="gitHubRepoModalTitleP" class="modal-card-title">GitHub Repositories</p>
+        <button class="delete is-danger" aria-label="close" onClick="closeGitHubRepoModal()"></button>
+      </header>
+      <section id="gitHubRepoModalBody" class="modal-card-body">
+        <button id="gitHubRepoLoadingButton" class="button is-loading">Loading</button>
+        <div id="gitHubRepoModalContent"></div>
+      </section>
+      <footer class="modal-card-foot">
       </footer>
     </div>
   </div>

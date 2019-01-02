@@ -2,7 +2,7 @@ const reqPromise = require("request-promise");
 const constants = require("./../constants/constants");
 
 module.exports = {
-  retrieveContent: function jDoodleCompile(url) {
+  retrieveContent: function retrieveContent(url) {
     if (url === null || url.length <= 0) {
       return "";
     }

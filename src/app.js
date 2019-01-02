@@ -11,9 +11,17 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
 }
 
 // JS Imports
+const gitHubInstance = require('github-api');
 const compileJS = require("./jdoodle/compile");
 const usageJS = require("./jdoodle/usage");
 const gHRetrieveJS = require("./github/gHRetrieve");
+const gitHubCredentials = require("./github/credentials");
+
+const gitHub = new gitHubInstance({
+  token: gitHubCredentials.TOKEN
+});
+const gHUser = gitHub.getUser();
+let repository;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -37,7 +45,7 @@ const createWindow = () => {
   mainWindow.setMenu(null);
 
   // Open DevTools on launch.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
@@ -101,7 +109,7 @@ ipcMain.on("check-usage", (event) => {
   const messageBoxProp = {
     type: "info",
     buttons: ["Cool"],
-    title: "Credit(s) Spent",
+    title: "Usage",
     message: "",
     detail: "",
   };
@@ -123,3 +131,60 @@ ipcMain.on("download", (event, descLink, solutionLink) => {
     mainWindow.webContents.send("downloaded", values);
   });
 });
+
+ipcMain.on("list-repos", (event) => {
+  gHUser.listRepos(function (err, repoList) {
+    mainWindow.webContents.send("repos-list", repoList);
+  });
+});
+
+ipcMain.on("get-repo", (event, repoUser, repoName) => {
+  repository = gitHub.getRepo(repoUser, repoName);
+  repository.listBranches(function (err, branchList) {
+    mainWindow.webContents.send("branch-list", branchList);
+  });
+});
+
+ipcMain.on("get-branch", (event, ref) => {
+  repository.getContents(ref, "", false, function (err, contentArr) {
+    contentArr.sort(createComparator());
+    mainWindow.webContents.send("branch-contents", contentArr);
+  });
+});
+
+ipcMain.on("get-dir", (event, repoInfo) => {
+  let dirPath = "";
+  repoInfo.dirPath.forEach(function(dir) {
+    dirPath += dir;
+    dirPath += "/";
+  });
+  repository.getContents(repoInfo.branchRef, dirPath, false, function (err, contentArr) {
+    contentArr.sort(createComparator());
+    mainWindow.webContents.send("dir-contents", contentArr);
+  });
+});
+
+ipcMain.on("get-desc", (event, descLink) => {
+  Promise.all([gHRetrieveJS.retrieveContent(descLink)]).then((content) => {
+    mainWindow.webContents.send("got-desc", content);
+  });
+});
+
+ipcMain.on("get-sol", (event, solLink) => {
+  Promise.all([gHRetrieveJS.retrieveContent(solLink)]).then((content) => {
+    mainWindow.webContents.send("got-sol", content);
+  });
+});
+
+function createComparator() {
+  return function(a, b) {
+    const nameA = a.name.trim().toLowerCase();
+    const nameB = b.name.trim().toLowerCase();
+
+    if (nameA < nameB) {
+      return -1;
+    } else if (nameA > nameB) {
+      return 1;
+    } else {return 0; }
+  };
+}
