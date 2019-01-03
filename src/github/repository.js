@@ -3,6 +3,17 @@ export class Repository {
     this.repoUser = (repoUser === undefined) ? "" : repoUser;
     this.repoName = (repoName === undefined) ? "" : repoName;
     this.branchRef = "";
+    this.descPath = "";
+    this.solPath = "";
+    this.dirPath = [];
+  }
+
+  clearContents() {
+    this.repoUser = "";
+    this.repoName = "";
+    this.branchRef = "";
+    this.descPath = "";
+    this.solPath = "";
     this.dirPath = [];
   }
 
@@ -28,6 +39,22 @@ export class Repository {
 
   getBranchRef() {
     return this.branchRef;
+  }
+
+  setDescPath(descPath) {
+    this.descPath = descPath;
+  }
+
+  getDescPath() {
+    return this.descPath;
+  }
+
+  setSolPath(solPath) {
+    this.solPath = solPath;
+  }
+
+  getSolPath() {
+    return this.solPath;
   }
 
   addDirToPath(dir) {

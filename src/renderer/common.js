@@ -52,11 +52,16 @@ function createContentRow(contentElement) {
   const iconCell = document.createElement("td");
   const downloadCell = document.createElement("td");
   const elementButton = document.createElement("button");
+  const commitButton = document.createElement("button");
   const descButton = document.createElement("button");
   const solButton = document.createElement("button");
 
   elementButton.classList.add("button");
   elementButton.classList.add("is-small");
+
+  commitButton.classList.add("button");
+  commitButton.classList.add("is-small");
+  commitButton.classList.add("is-link");
 
   descButton.classList.add("button");
   descButton.classList.add("is-small");
@@ -71,21 +76,31 @@ function createContentRow(contentElement) {
     elementButton.onclick = () => { getDirContent(contentElement.name); };
 
     iconCell.appendChild(elementButton);
+
+    if (!isInDownLoadMode) {
+      commitButton.innerHTML = "<span class='icon is-small'><i class='fas fa-upload'></i></span> &emsp; Commit Here";
+      commitButton.onclick = () => { startGitHubCommit(contentElement.path); };
+      commitButton.setAttribute("title", "Write to GitHub");
+      downloadCell.appendChild(commitButton);
+    }
   } else {
     elementButton.innerHTML = "<span class='icon is-small'><i class='far fa-file'></i></span> &emsp;" + contentElement.name;
     elementButton.setAttribute("disabled", "");
 
-    descButton.innerHTML = "<span class='icon is-small'><i class='fas fa-download'></i></span> &emsp; Description";
-    descButton.onclick = () => { getDescriptionContent(contentElement.download_url); };
-    descButton.setAttribute("title", "Download/Set Description");
+    if (isInDownLoadMode) {
+      descButton.innerHTML = "<span class='icon is-small'><i class='fas fa-download'></i></span> &emsp; Description";
+      descButton.onclick = () => { getDescriptionContent(contentElement.download_url); };
+      descButton.setAttribute("title", "Download/Set Description");
 
-    solButton.innerHTML = "<span class='icon is-small'><i class='fas fa-download'></i></span> &emsp; Solution";
-    solButton.onclick = () => { getSolutionContent(contentElement.download_url); };
-    solButton.setAttribute("title", "Download/Set Solution");
+      solButton.innerHTML = "<span class='icon is-small'><i class='fas fa-download'></i></span> &emsp; Solution";
+      solButton.onclick = () => { getSolutionContent(contentElement.download_url); };
+      solButton.setAttribute("title", "Download/Set Solution");
+
+      downloadCell.appendChild(descButton);
+      downloadCell.appendChild(solButton);
+    }
 
     iconCell.appendChild(elementButton);
-    downloadCell.appendChild(descButton);
-    downloadCell.appendChild(solButton);
   }
 
   tableRow.appendChild(iconCell);

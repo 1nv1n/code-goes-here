@@ -15,13 +15,14 @@ const GitHubInstance = require("github-api");
 const fileSystem = require("fs");
 const compileJS = require("./jdoodle/compile");
 const usageJS = require("./jdoodle/usage");
-const gHRetrieveJS = require("./github/gHRetrieve");
+const gitHubJS = require("./github/gitHub");
 const gitHubCredentials = require("./github/credentials");
 
 const gitHub = new GitHubInstance({
   token: gitHubCredentials.TOKEN,
 });
 const gHUser = gitHub.getUser();
+
 let repository;
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -128,7 +129,7 @@ ipcMain.on("check-usage", (event) => {
 });
 
 ipcMain.on("download", (event, descLink, solutionLink) => {
-  Promise.all([gHRetrieveJS.retrieveContent(descLink), gHRetrieveJS.retrieveContent(solutionLink)]).then((values) => {
+  Promise.all([gitHubJS.retrieveContent(descLink), gitHubJS.retrieveContent(solutionLink)]).then((values) => {
     mainWindow.webContents.send("downloaded", values);
   });
 });
@@ -136,7 +137,7 @@ ipcMain.on("download", (event, descLink, solutionLink) => {
 ipcMain.on("save-local", (event, descTxt, solTxt) => {
   const options = {
     title: "Save Problem Description",
-    defaultPath: app.getPath("documents") + "/ProblemDescription.md",
+    defaultPath: app.getPath("documents").concat("/ProblemDescription.md"),
   };
 
   const messageBoxProp = {
@@ -151,38 +152,38 @@ ipcMain.on("save-local", (event, descTxt, solTxt) => {
     try {
       fileSystem.writeFileSync(path, descTxt, "utf-8");
     } catch (err) {
-      messageBoxProp.detail = err;
+      messageBoxProp.detail = JSON.stringify(err);
       dialog.showMessageBox(messageBoxProp);
     }
   });
 
   options.title = "Save Problem Solution";
-  options.defaultPath = app.getPath("documents") + "/Solution";
+  options.defaultPath = app.getPath("documents").concat("/Solution");
   dialog.showSaveDialog(null, options, (path) => {
     try {
       fileSystem.writeFileSync(path, solTxt, "utf-8");
     } catch (err) {
-      messageBoxProp.detail = err;
+      messageBoxProp.detail = JSON.stringify(err);
       dialog.showMessageBox(messageBoxProp);
     }
   });
 });
 
 ipcMain.on("list-repos", (event) => {
-  gHUser.listRepos(function (err, repoList) {
+  gHUser.listRepos((err, repoList) => {
     mainWindow.webContents.send("repos-list", repoList);
   });
 });
 
 ipcMain.on("get-repo", (event, repoUser, repoName) => {
   repository = gitHub.getRepo(repoUser, repoName);
-  repository.listBranches(function (err, branchList) {
+  repository.listBranches((err, branchList) => {
     mainWindow.webContents.send("branch-list", branchList);
   });
 });
 
 ipcMain.on("get-branch", (event, ref) => {
-  repository.getContents(ref, "", false, function (err, contentArr) {
+  repository.getContents(ref, "", false, (err, contentArr) => {
     contentArr.sort(createComparator());
     mainWindow.webContents.send("branch-contents", contentArr);
   });
@@ -190,28 +191,56 @@ ipcMain.on("get-branch", (event, ref) => {
 
 ipcMain.on("get-dir", (event, repoInfo) => {
   let dirPath = "";
-  repoInfo.dirPath.forEach(function(dir) {
+  repoInfo.dirPath.forEach((dir) => {
     dirPath += dir;
     dirPath += "/";
   });
-  repository.getContents(repoInfo.branchRef, dirPath, false, function (err, contentArr) {
+  repository.getContents(repoInfo.branchRef, dirPath, false, (err, contentArr) => {
     contentArr.sort(createComparator());
     mainWindow.webContents.send("dir-contents", contentArr);
   });
 });
 
 ipcMain.on("get-desc", (event, descLink) => {
-  Promise.all([gHRetrieveJS.retrieveContent(descLink)]).then((content) => {
+  Promise.all([gitHubJS.retrieveContent(descLink)]).then((content) => {
     mainWindow.webContents.send("got-desc", content);
   });
 });
 
 ipcMain.on("get-sol", (event, solLink) => {
-  Promise.all([gHRetrieveJS.retrieveContent(solLink)]).then((content) => {
+  Promise.all([gitHubJS.retrieveContent(solLink)]).then((content) => {
     mainWindow.webContents.send("got-sol", content);
   });
 });
 
+ipcMain.on("commit-github", (event, repoInfo, descTxt, solTxt, commitMessage) => {
+  const user = gitHub.getUser();
+  Promise.all([gitHubJS.retrieveUser(user), gitHubJS.retrieveEmailList(user)]).then((values) => {
+    const options = {
+      author: {
+        name: values[0].name,
+        email: values[1][0].email,
+      },
+      committer: {
+        name: values[0].name,
+        email: values[1][0].email,
+      },
+      encode: true,
+    };
+
+    repository = gitHub.getRepo(repoInfo.repoUser, repoInfo.repoName);
+    Promise.all([gitHubJS.writeFile(repository, repoInfo.branchRef, repoInfo.descPath, descTxt, commitMessage, options)]).then((descCommit) => {
+      Promise.all([gitHubJS.writeFile(repository, repoInfo.branchRef, repoInfo.solPath, solTxt, commitMessage, options)]).then((solCommit) => {
+        mainWindow.webContents.send("committed", descCommit, solCommit);
+      });
+    });
+  });
+});
+
+/**
+ * A comparator to sort files & directories by name.
+ * Intended for the Repository.getContents response.
+ */
 function createComparator() {
   return function sortByName(a, b) {
     const nameA = a.name.trim().toLowerCase();

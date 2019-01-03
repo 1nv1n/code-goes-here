@@ -6,6 +6,7 @@ const { BrowserWindow } = require("electron").remote;
 const repoInfo = new Repository();
 
 let isAppMaximized = false;
+let isInDownLoadMode = true;
 
 /**
  * Minimize the App.
@@ -63,6 +64,46 @@ function clearSol() {
 }
 
 /**
+ * Launch the GitHub Modal to select a directory to commit to.
+ */
+function launchGitHubRepoModalForCommit() {
+  launchGitHubRepoModal();
+  isInDownLoadMode = false;
+}
+
+/**
+ * Launch the GitHub commit modal.
+ * @param {String} path
+ */
+function startGitHubCommit(path) {
+  repoInfo.setDescPath(path.concat("/ProblemDescription.md"));
+  repoInfo.setSolPath(path.concat("/Solution."));
+  closeGitHubRepoModal();
+  launchGitHubCommitModal();
+}
+
+/**
+ * Send description & code to the main process to commit to GitHub.
+ */
+function doGitHubCommit() {
+  document.getElementById("gitHubCommitButton").classList.add("is-loading");
+  repoInfo.setDescPath(document.getElementById("descPathInput").value);
+  repoInfo.setSolPath(document.getElementById("solPathInput").value);
+  ipcRenderer.send("commit-github", repoInfo, descEditor.getValue(), codeEditor.getValue(), document.getElementById("commitMessageInput").value);
+}
+
+/**
+ * Set the commit values to the modal
+ * @param {String} descCommit
+ * @param {String} solCommit
+ */
+function setCommitToModal(descCommit, solCommit) {
+  document.getElementById("gitHubCommitButton").classList.remove("is-loading");
+  document.getElementById("commitSHA1").value = descCommit;
+  document.getElementById("commitSHA2").value = solCommit;
+}
+
+/**
  * Launch the download modal
  */
 function launchDownloadModal() {
@@ -82,6 +123,8 @@ function closeDownloadModal() {
  * Launch the GitHub Repo. modal
  */
 function launchGitHubRepoModal() {
+  isInDownLoadMode = true;
+  repoInfo.clearContents();
   document.getElementById("gitHubRepoModal").classList.add("is-active");
   document.documentElement.classList.add("is-clipped");
   document.getElementById("gitHubRepoBackButton").innerHTML = "Close";
@@ -127,6 +170,31 @@ function backGitHubRepoModal() {
     repoInfo.getDirPath().pop();
     ipcRenderer.send("get-dir", repoInfo);
   }
+}
+
+/**
+ * Launch the GitHub Commit modal
+ */
+function launchGitHubCommitModal() {
+  isInDownLoadMode = true;
+  document.getElementById("gitHubCommitModal").classList.add("is-active");
+  document.documentElement.classList.add("is-clipped");
+  document.getElementById("descPathInput").value = repoInfo.getDescPath();
+  document.getElementById("solPathInput").value = repoInfo.getSolPath();
+}
+
+/**
+ * Close the GitHub Commit modal
+ */
+function closeGitHubCommitModal() {
+  document.getElementById("descPathInput").value = "";
+  document.getElementById("solPathInput").value = "";
+  document.getElementById("commitMessageInput").value = "";
+
+  repoInfo.clearContents();
+
+  document.getElementById("gitHubCommitModal").classList.remove("is-active");
+  document.documentElement.classList.remove("is-clipped");
 }
 
 /**
@@ -328,4 +396,11 @@ ipcRenderer.on("got-sol", (event, content) => {
   if (content[0] !== null && content[0].length > 0) {
     updateCode(content[0]);
   }
+});
+
+/**
+ * Handle the commit event.
+ */
+ipcRenderer.on("committed", (event, descCommit, solCommit) => {
+  setCommitToModal(descCommit, solCommit);
 });
