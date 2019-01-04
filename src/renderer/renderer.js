@@ -190,6 +190,8 @@ function closeGitHubCommitModal() {
   document.getElementById("descPathInput").value = "";
   document.getElementById("solPathInput").value = "";
   document.getElementById("commitMessageInput").value = "";
+  document.getElementById("commitSHA1").value = "";
+  document.getElementById("commitSHA2").value = "";
 
   repoInfo.clearContents();
 
