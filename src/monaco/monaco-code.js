@@ -109,6 +109,7 @@ function openLanguageModal() {
       language: currLang[3],
       renderWhitespace: "all",
       scrollBeyondLastLine: false,
+      tabSize: 2,
       theme: "vs-dark",
       value: [
         "public class CodeGoesHere {",
