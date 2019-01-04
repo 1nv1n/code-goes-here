@@ -1,6 +1,6 @@
 # code-goes-here
 
-Code Goes Here is intended to be a one-stop solution for writing, executing & evaluating code; mitigating the reliance on various websites that offer problems & an online IDE experience to solve those problems, but don't offer an easy way to export written code to one's own repository.
+Cross Platform Desktop App to define problems & code solutions (using the Monaco Editor) - compile the solutions using JDoodle & finally, commit to GitHub.
 
 ## Built With
 
