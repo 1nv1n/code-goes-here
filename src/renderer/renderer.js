@@ -64,6 +64,22 @@ function clearSol() {
 }
 
 /**
+ * Reset the content of the description editor to the value from the template.
+ */
+function resetDesc() {
+  document.getElementById("resetDescButton").classList.add("is-loading");
+  ipcRenderer.send("reset-desc");
+}
+
+/**
+ * Clear the content of the solution editor to the value from the template.
+ */
+function resetSol() {
+  document.getElementById("resetSolButton").classList.add("is-loading");
+  ipcRenderer.send("reset-sol", 1);
+}
+
+/**
  * Launch the GitHub Modal to select a directory to commit to.
  */
 function launchGitHubRepoModalForCommit() {
@@ -280,7 +296,7 @@ function populateReposList(repoList) {
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
   const wrappingTagsDiv = createWrappingDiv("repoListDiv");
-  Object.keys(repoList).forEach((key) => {
+  Object.keys(repoList).forEach(key => {
     const repoButton = createSpanButton(repoList[key].name);
     repoButton.onclick = () => {
       document.getElementById("gitHubRepoBackButton").innerHTML = "Back";
@@ -299,9 +315,11 @@ function populateBranchList(branchList) {
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
   const wrappingTagsDiv = createWrappingDiv("branchListDiv");
-  Object.keys(branchList).forEach((key) => {
+  Object.keys(branchList).forEach(key => {
     const branchButton = createSpanButton(branchList[key].name);
-    branchButton.onclick = () => { getBranchContent(branchList[key].name); };
+    branchButton.onclick = () => {
+      getBranchContent(branchList[key].name);
+    };
     wrappingTagsDiv.appendChild(branchButton);
   });
   document.getElementById("gitHubRepoModalContent").appendChild(wrappingTagsDiv);
@@ -316,7 +334,7 @@ function populateContentList(contentList) {
   loadingButton.style.display = "none";
   const wrappingTagsDiv = createWrappingDiv("contentListDiv");
   const table = createTable("contentListTable", "contentListTableBody");
-  Object.keys(contentList).forEach((key) => {
+  Object.keys(contentList).forEach(key => {
     const tableRow = createContentRow(contentList[key]);
     table.appendChild(tableRow);
   });
@@ -355,6 +373,22 @@ ipcRenderer.on("usage-checked", (event, code) => {
 });
 
 /**
+ * Handle the description template recieved event.
+ */
+ipcRenderer.on("desc-template", (event, desc) => {
+  document.getElementById("resetDescButton").classList.remove("is-loading");
+  descEditor.setValue(desc);
+});
+
+/**
+ * Handle the solution template recieved event.
+ */
+ipcRenderer.on("sol-template", (event, code) => {
+  document.getElementById("resetSolButton").classList.remove("is-loading");
+  codeEditor.setValue(code);
+});
+
+/**
  * Handle the receipt of the list of the repositories associated to the currently authenticated user.
  */
 ipcRenderer.on("repos-list", (event, repoList) => {
@@ -362,7 +396,7 @@ ipcRenderer.on("repos-list", (event, repoList) => {
 });
 
 /**
- * Handle the receipt of the list of the selected respository's branches.
+ * Handle the receipt of the list of the selected respository"s branches.
  */
 ipcRenderer.on("branch-list", (event, branchList) => {
   populateBranchList(branchList);
