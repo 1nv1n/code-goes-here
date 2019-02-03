@@ -112,11 +112,7 @@ function openLanguageModal() {
       tabSize: 2,
       theme: "vs-dark",
       value: [
-        "public class CodeGoesHere {",
-        "\tpublic static void main(String[] args) {",
-        "\t\tSystem.out.println(\"Hello from Monaco!\");",
-        "\t}",
-        "}",
+        "",
       ].join("\n"),
     });
   });

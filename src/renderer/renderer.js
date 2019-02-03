@@ -92,7 +92,7 @@ function launchGitHubRepoModalForCommit() {
  * @param {String} path
  */
 function startGitHubCommit(path) {
-  repoInfo.setDescPath(path.concat("/ProblemDescription.md"));
+  repoInfo.setDescPath(path.concat("/README.md"));
   repoInfo.setSolPath(path.concat("/Solution."));
   closeGitHubRepoModal();
   launchGitHubCommitModal();
