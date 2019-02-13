@@ -49,10 +49,7 @@ function updateDesc(description) {
       scrollBeyondLastLine: false,
       theme: "vs-dark",
       value: [
-        "# Problem Description",
-        "Create a greet function\n",
-        "## Sample output",
-        "Hello from Monaco!",
+        "",
       ].join("\n"),
     });
   });

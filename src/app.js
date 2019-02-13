@@ -134,10 +134,23 @@ ipcMain.on("download", (event, descLink, solutionLink) => {
   });
 });
 
+ipcMain.on("reset-desc", (event) => {
+  fileSystem.readFile(`${__dirname}/template/README.md`, "utf8", (err, data) => {
+    mainWindow.webContents.send("desc-template", data);
+  });
+});
+
+ipcMain.on("reset-sol", (event, solLangFlag) => {
+  const path = (solLangFlag === 1) ? `${__dirname}/template/Solution.java` : `${__dirname}/template/Solution`;
+  fileSystem.readFile(path, "utf8", (err, data) => {
+    mainWindow.webContents.send("sol-template", data);
+  });
+});
+
 ipcMain.on("save-local", (event, descTxt, solTxt) => {
   const options = {
-    title: "Save Problem Description",
-    defaultPath: app.getPath("documents").concat("/ProblemDescription.md"),
+    title: "Save Readme (Problem Description)",
+    defaultPath: app.getPath("documents").concat("/README.md"),
   };
 
   const messageBoxProp = {

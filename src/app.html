@@ -4,23 +4,23 @@
 
 <head>
   <!-- HTML5 META Tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="CodeGoesHere">
-  <meta name="author" content="1nv1n">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="CodeGoesHere" />
+  <meta name="author" content="1nv1n" />
 
   <title>CodeGoesHere</title>
 
   <!-- Bulma! -->
-  <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css">
+  <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css" />
   <!-- App CSS -->
-  <link rel="stylesheet" href="./app.css">
+  <link rel="stylesheet" href="./app.css" />
   <!-- Monaco CSS -->
-  <link rel="stylesheet" href="./monaco/monaco.css">
+  <link rel="stylesheet" href="./monaco/monaco.css" />
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
 
   <!-- Font Awesome! -->
   <script defer src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
@@ -40,19 +40,13 @@
       <span>CodeGoesHere</span>
       <div class="buttons is-pulled-right titlebar-buttons">
         <button title="Minimize" class="button is-small is-link" onClick="minimizeApp()">
-          <span class="icon is-small">
-            <i class="fas fa-minus"></i>
-          </span>
+          <span class="icon is-small"> <i class="fas fa-minus"></i> </span>
         </button>
         <button title="Maximize" class="button is-small is-link" onClick="maximizeApp()">
-          <span class="icon is-small">
-            <i id="maximizeAppBtnIcon" class="fas fa-square"></i>
-          </span>
+          <span class="icon is-small"> <i id="maximizeAppBtnIcon" class="fas fa-square"></i> </span>
         </button>
         <button title="Quit/Close" class="button is-small is-link" onClick="closeApp()">
-          <span class="icon is-small">
-            <i class="fas fa-times"></i>
-          </span>
+          <span class="icon is-small"> <i class="fas fa-times"></i> </span>
         </button>
       </div>
     </div>
@@ -134,9 +128,7 @@
         <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeLanguageModal()"></button>
       </header>
       <section id="languageModalContent" class="modal-card-body"></section>
-      <footer class="modal-card-foot">
-        <button id="closeLangModalButton" class="button is-link" onClick="closeLanguageModal()">Close</button>
-      </footer>
+      <footer class="modal-card-foot"><button id="closeLangModalButton" class="button is-link" onClick="closeLanguageModal()">Close</button></footer>
     </div>
   </div>
 
@@ -170,18 +162,15 @@
           </div>
           <div class="message-body">
             Input the full path to the raw file containing the content to be downloaded; for both, the problem
-            description, as well as the solution. eg: https://raw.githubusercontent.com/..desc.md
+            description, as well as the solution. eg:
+            https://raw.githubusercontent.com/..Solution.java
           </div>
         </article>
         <div class="field">
-          <div class="control">
-            <input id="probDescInput" class="input is-info" type="text" placeholder="Problem Description">
-          </div>
+          <div class="control"><input id="probDescInput" class="input is-info" type="text" placeholder="Readme" /></div>
         </div>
         <div class="field">
-          <div class="control">
-            <input id="solutionInput" class="input is-info" type="text" placeholder="Solution">
-          </div>
+          <div class="control"><input id="solutionInput" class="input is-info" type="text" placeholder="Solution" /></div>
         </div>
       </section>
       <footer class="modal-card-foot">
@@ -224,20 +213,22 @@
           </div>
           <div class="message-body">
             Input the full path the raw file containing the content to be downloaded for both, the problem description
-            as well as the solution. eg: https://raw.githubusercontent.com/..desc.md
+            as well as the solution. eg:
+            https://raw.githubusercontent.com/..Solution.java
           </div>
         </article>
+        <div class="field"><label class="label">Description Path</label> <input id="descPathInput" class="input" type="text"
+            placeholder="Path" /></div>
+        <div class="field"><label class="label">Solution Path</label> <input id="solPathInput" class="input" type="text"
+            placeholder="Path" /></div>
         <div class="field">
-          <label class="label">Description Path</label>
-          <input id="descPathInput" class="input" type="text" placeholder="Path">
+          <label class="label">Commit Message</label> <input id="commitMessageInput" class="input" type="text"
+            placeholder="Commit Message" />
         </div>
         <div class="field">
-          <label class="label">Solution Path</label>
-          <input id="solPathInput" class="input" type="text" placeholder="Path">
-        </div>
-        <div class="field">
-          <label class="label">Commit Message</label>
-          <input id="commitMessageInput" class="input" type="text" placeholder="Commit Message">
+          <label class="label is-small">Commit SHAs</label> <input id="commitSHA1" class="input is-small" type="text"
+            disabled />
+          <input id="commitSHA2" class="input is-small" type="text" disabled />
         </div>
         <div class="field">
           <label class="label is-small">Commit SHAs</label>
