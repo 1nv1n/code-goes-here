@@ -58,66 +58,68 @@
     </div>
   </header>
   <div class="app-wrapper">
+    <div id="buttonBar" class="button-bar">
+      <button id="toggleColumnDesc" title="Minimize Description Column" class="button is-small is-link" value="min" onClick="toggleColumnDesc()">
+        <span class="icon is-small">
+          <i id="descColMinBtnIcon" class="fas fa-minus"></i>
+        </span>
+      </button>
+      <button id="toggleCodeDesc" title="Minimize Code Column" class="button is-small is-link" value="min" onClick="toggleColumnCode()">
+        <span class="icon is-small">
+          <i id="codeColMinBtnIcon" class="fas fa-minus"></i>
+        </span>
+      </button>
+      <button title="Clear Description" class="button is-small is-link" onClick="clearDesc()">
+        <span class="icon is-small">
+          <i class="far fa-trash-alt"></i>
+        </span>
+      </button>
+      <button title="Clear Solution" class="button is-small is-link" onClick="clearSol()">
+        <span class="icon is-small">
+          <i class="far fa-trash-alt"></i>
+        </span>
+      </button>
+      <button title="Select Language" class="button is-small is-link" onClick="openLanguageModal()">
+        <span class="icon is-small">
+          <i class="fas fa-language"></i>
+        </span>
+      </button>
+      <button title="Direct Download" class="button is-small is-link" onClick="launchDownloadModal()">
+        <span class="icon is-small">
+          <i class="fas fa-download"></i>
+        </span>
+      </button>
+      <button title="GitHub Download" class="button is-small is-link" onClick="launchGitHubRepoModal()">
+        <span class="icon is-small">
+          <i class="fab fa-github"></i>
+        </span>
+      </button>
+      <button title="Local Save" class="button is-small is-link" onClick="saveLocal()">
+        <span class="icon is-small">
+          <i class="fas fa-save"></i>
+        </span>
+      </button>
+      <button title="Commit to GitHub" class="button is-small is-link" onClick="launchGitHubRepoModalForCommit()">
+        <span class="icon is-small">
+          <i class="fas fa-code-branch"></i>
+        </span>
+      </button>
+      <button title="Check Compiler Usage" id="checkUsageButton" class="button is-small is-link" onClick="checkUsage()">
+        <span class="icon is-small">
+          <i class="fas fa-dollar-sign"></i>
+        </span>
+      </button>
+      <button title="Execute Code" id="executeCodeButton" class="button is-small is-link" onClick="sendCodeForExecution()">
+        <span class="icon is-small">
+          <i class="fas fa-play"></i>
+        </span>
+      </button>
+    </div>
     <div class="columns column-wrapper">
-      <div id="descColumn" class="column is-one-third mon-column desc-column">
-        <button title="Minimize Column" class="button is-small is-link" onClick="minimizeColumnDesc()" disabled>
-          <span class="icon is-small">
-            <i id="descColMinBtnIcon" class="fas fa-window-minimize"></i>
-          </span>
-        </button>
-        <button title="Clear Description" class="button is-small is-link" onClick="clearDesc()">
-          <span class="icon is-small">
-            <i class="far fa-trash-alt"></i>
-          </span>
-        </button>
-        <button title="Direct Download" class="button is-small is-link" onClick="launchDownloadModal()">
-          <span class="icon is-small">
-            <i class="fas fa-download"></i>
-          </span>
-        </button>
-        <button title="GitHub Download" class="button is-small is-link" onClick="launchGitHubRepoModal()">
-          <span class="icon is-small">
-            <i class="fab fa-github"></i>
-          </span>
-        </button>
-        <button title="Local Save" class="button is-small is-link" onClick="saveLocal()">
-          <span class="icon is-small">
-            <i class="fas fa-save"></i>
-          </span>
-        </button>
-        <button title="Commit to GitHub" class="button is-small is-link" onClick="launchGitHubRepoModalForCommit()">
-          <span class="icon is-small">
-            <i class="fas fa-code-branch"></i>
-          </span>
-        </button>
+      <div id="descColumn" class="column is-4">
         <div id="monDescEditor" class="monaco-editor"></div>
       </div>
-      <div class="column mon-column code-column">
-        <button title="Minimize Column" class="button is-small is-link" onClick="minimizeColumnCode()" disabled>
-          <span class="icon is-small">
-            <i id="codeColMinBtnIcon" class="fas fa-window-minimize"></i>
-          </span>
-        </button>
-        <button title="Clear Solution" class="button is-small is-link" onClick="clearSol()">
-          <span class="icon is-small">
-            <i class="far fa-trash-alt"></i>
-          </span>
-        </button>
-        <button title="Execute Code" id="executeCodeButton" class="button is-small is-success" onClick="sendCodeForExecution()">
-          <span class="icon is-small">
-            <i class="fas fa-play"></i>
-          </span>
-        </button>
-        <button title="Select Language" class="button is-small is-link" onClick="openLanguageModal()">
-          <span class="icon is-small">
-            <i class="fas fa-language"></i>
-          </span>
-        </button>
-        <button title="Check Compiler Usage" id="checkUsageButton" class="button is-small is-link" onClick="checkUsage()">
-          <span class="icon is-small">
-            <i class="fas fa-dollar-sign"></i>
-          </span>
-        </button>
+      <div id="solColumn" class="column is-8">
         <div id="monCodeEditor" class="monaco-editor"></div>
       </div>
     </div>
@@ -237,11 +239,11 @@
           <label class="label">Commit Message</label>
           <input id="commitMessageInput" class="input" type="text" placeholder="Commit Message">
         </div>
-          <div class="field">
-            <label class="label is-small">Commit SHAs</label>
-            <input id="commitSHA1" class="input is-small" type="text" disabled>
-            <input id="commitSHA2" class="input is-small" type="text" disabled>
-          </div>
+        <div class="field">
+          <label class="label is-small">Commit SHAs</label>
+          <input id="commitSHA1" class="input is-small" type="text" disabled>
+          <input id="commitSHA2" class="input is-small" type="text" disabled>
+        </div>
       </section>
       <footer class="modal-card-foot">
         <button title="Commit" id="gitHubCommitButton" class="button is-link" onClick="doGitHubCommit()">Commit</button>

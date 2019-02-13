@@ -34,6 +34,77 @@ function maximizeApp() {
 function closeApp() {
   BrowserWindow.getFocusedWindow().close();
 }
+
+/**
+ * Collapse the description editor column.
+ */
+function toggleColumnDesc() {
+  if (document.getElementById("toggleColumnDesc").value === "min") {
+    document.getElementById("descColumn").classList.remove("is-4");
+    document.getElementById("descColumn").classList.add("is-hidden-touch");
+    document.getElementById("descColumn").classList.add("is-hidden-tablet");
+    document.getElementById("descColumn").classList.add("is-hidden-desktop");
+
+    document.getElementById("solColumn").classList.remove("is-8");
+    document.getElementById("solColumn").classList.add("is-12");
+
+    document.getElementById("descColMinBtnIcon").classList.remove("fa-minus");
+    document.getElementById("descColMinBtnIcon").classList.add("fa-plus");
+
+    document.getElementById("toggleColumnDesc").value = "max";
+    document.getElementById("toggleColumnDesc").title = "Maximize Description Column";
+  } else {
+    document.getElementById("descColumn").classList.add("is-4");
+    document.getElementById("descColumn").classList.remove("is-hidden-touch");
+    document.getElementById("descColumn").classList.remove("is-hidden-tablet");
+    document.getElementById("descColumn").classList.remove("is-hidden-desktop");
+
+    document.getElementById("solColumn").classList.remove("is-12");
+    document.getElementById("solColumn").classList.add("is-8");
+
+    document.getElementById("descColMinBtnIcon").classList.add("fa-minus");
+    document.getElementById("descColMinBtnIcon").classList.remove("fa-plus");
+
+    document.getElementById("toggleColumnDesc").value = "min";
+    document.getElementById("toggleColumnDesc").title = "Minimize Description Column";
+  }
+}
+
+/**
+ * Collapse the code editor column.
+ */
+function toggleColumnCode() {
+  if (document.getElementById("toggleCodeDesc").value === "min") {
+    document.getElementById("solColumn").classList.remove("is-8");
+    document.getElementById("solColumn").classList.add("is-hidden-touch");
+    document.getElementById("solColumn").classList.add("is-hidden-tablet");
+    document.getElementById("solColumn").classList.add("is-hidden-desktop");
+
+    document.getElementById("descColumn").classList.remove("is-4");
+    document.getElementById("descColumn").classList.add("is-12");
+
+    document.getElementById("codeColMinBtnIcon").classList.remove("fa-minus");
+    document.getElementById("codeColMinBtnIcon").classList.add("fa-plus");
+
+    document.getElementById("toggleCodeDesc").value = "max";
+    document.getElementById("toggleCodeDesc").title = "Maximize Code Column";
+  } else {
+    document.getElementById("solColumn").classList.remove("is-hidden-touch");
+    document.getElementById("solColumn").classList.remove("is-hidden-tablet");
+    document.getElementById("solColumn").classList.remove("is-hidden-desktop");
+    document.getElementById("solColumn").classList.add("is-8");
+
+    document.getElementById("descColumn").classList.remove("is-12");
+    document.getElementById("descColumn").classList.add("is-4");
+
+    document.getElementById("codeColMinBtnIcon").classList.add("fa-minus");
+    document.getElementById("codeColMinBtnIcon").classList.remove("fa-plus");
+
+    document.getElementById("toggleCodeDesc").value = "min";
+    document.getElementById("toggleCodeDesc").title = "Minimize Code Column";
+  }
+}
+
 /**
  * Download provided problem & solution.
  */
