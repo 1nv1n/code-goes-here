@@ -28,7 +28,7 @@ body {
   padding: 4px;
   height: 32px; /* Standard title-bar height */
   width: calc(100% - 2px); /* Compensate for body 1px border. */
-  background: #3273dc; /* Match Bulma's "link" color. */
+  background: #3273dc; /* Match Bulma's "link" color for aesthetics. */
   color: #ffffff;
 }
 #titlebar #drag-region {
@@ -45,8 +45,13 @@ body {
   height: calc(100% - 32px);
   width: 100%;
   overflow: auto;
-  animation: fadein 0.75s;
+  animation: fadein 1s;
   perspective: 2000px;
+}
+
+.button-bar {
+  margin-top: 10px;
+  margin-left: 10px;
 }
 
 .column-wrapper {
