@@ -106,6 +106,14 @@ function toggleColumnCode() {
 }
 
 /**
+ * Set the defaults (description & solution) to the editors.
+ * TODO: Make this configurable.
+ */
+function setDefault() {
+  ipcRenderer.send("download", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/README.md", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/Solution.java");
+}
+
+/**
  * Download provided problem & solution.
  */
 function download() {
