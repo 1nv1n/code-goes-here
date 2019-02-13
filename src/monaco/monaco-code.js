@@ -106,6 +106,7 @@ function openLanguageModal() {
     monacoCodeEditor = monaco.editor;
     codeEditor = monaco.editor.create(document.getElementById("monCodeEditor"), {
       automaticLayout: true, // This incurs some performance cost
+      insertSpaces: true,
       language: currLang[3],
       renderWhitespace: "all",
       scrollBeyondLastLine: false,
