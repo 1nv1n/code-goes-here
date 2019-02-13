@@ -70,4 +70,4 @@ define("TOKEN", "YOUR_TOKEN_HERE");
  - [x] Initialize Electron application using Electron Forge.
 
 ## Work-In-Progress Screenshot
-![code-supposed-to-go-here](https://i.imgur.com/qMR8F5s.png)
+![code-supposed-to-go-here](https://i.imgur.com/983JIYq.png)
