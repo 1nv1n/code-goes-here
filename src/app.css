@@ -42,19 +42,26 @@ body {
 
 .app-wrapper {
   margin-top: 32px; /* Compensate for titlebar. */
-  height: calc(100% - 32px);
+  height: calc(100% - 32px); /* Compensate for titlebar. */
   width: 100%;
   overflow: auto;
   animation: fadein 1s;
   perspective: 2000px;
 }
 
-.button-bar {
-  margin-top: 10px;
-  margin-left: 10px;
+.level-button-bar {
+  margin: 0px !important;
+  padding: 10px;
+}
+
+.columns-wrapper {
+  margin: 0px !important;
+  padding: 0px;
 }
 
 .column-wrapper {
-  margin: 0px;
-  padding: 0px;
+  padding-top: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 0px;
 }
