@@ -97,12 +97,12 @@ ipcMain.on("execute-code", (event, editorText, language, versionIdx) => {
   compilePromise.then((result) => {
     messageBoxProp.message = `Status Code: ${result.statusCode}. Memory: ${result.memory}. CPU Time: ${result.cpuTime}. Output: ${result.output}`;
     dialog.showMessageBox(messageBoxProp);
-    mainWindow.webContents.send("compiled", 1);
+    mainWindow.webContents.send("compiled", 0);
   }, (err) => {
     messageBoxProp.message = JSON.stringify(err);
     messageBoxProp.buttons = ["Well, okay then..."];
     dialog.showMessageBox(messageBoxProp);
-    mainWindow.webContents.send("compiled", 0);
+    mainWindow.webContents.send("compiled", 1);
   });
 });
 
@@ -119,12 +119,12 @@ ipcMain.on("check-usage", (event) => {
   usageCheckPromise.then((result) => {
     messageBoxProp.message = `Used: ${result.used} Credit(s).`;
     dialog.showMessageBox(messageBoxProp);
-    mainWindow.webContents.send("usage-checked", 1);
+    mainWindow.webContents.send("usage-checked", 0);
   }, (err) => {
     messageBoxProp.message = JSON.stringify(err);
     messageBoxProp.buttons = ["Well, okay then..."];
     dialog.showMessageBox(messageBoxProp);
-    mainWindow.webContents.send("usage-checked", 0);
+    mainWindow.webContents.send("usage-checked", 1);
   });
 });
 
