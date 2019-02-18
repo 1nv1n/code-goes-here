@@ -41,7 +41,6 @@
         <i class="fas fa-laptop-code"></i>
         &nbsp;CodeGoesHere
       </span>
-      <!-- <span></span> -->
       <div class="buttons is-pulled-right titlebar-buttons">
         <button title="Minimize" class="button is-small is-link" onClick="minimizeApp()">
           <span class="icon is-small"> <i class="fas fa-minus"></i> </span>
@@ -56,67 +55,87 @@
     </div>
   </header>
   <div class="app-wrapper">
-    <div class="level-button-bar">
-      <button id="toggleColumnDesc" title="Minimize Description Column" class="button is-small is-link" value="min" onClick="toggleColumnDesc()">
-        <span class="icon is-small">
-          <i id="descColMinBtnIcon" class="fas fa-minus"></i>
-        </span>
-      </button>
-      <button id="toggleCodeDesc" title="Minimize Code Column" class="button is-small is-link" value="min" onClick="toggleColumnCode()">
-        <span class="icon is-small">
-          <i id="codeColMinBtnIcon" class="fas fa-minus"></i>
-        </span>
-      </button>
-      <button title="Clear Description" class="button is-small is-link" onClick="clearDesc()">
-        <span class="icon is-small">
-          <i class="far fa-trash-alt"></i>
-        </span>
-      </button>
-      <button title="Clear Solution" class="button is-small is-link" onClick="clearSol()">
-        <span class="icon is-small">
-          <i class="far fa-trash-alt"></i>
-        </span>
-      </button>
-      <button title="Select Language" class="button is-small is-link" onClick="openLanguageModal()">
-        <span class="icon is-small">
-          <i class="fas fa-language"></i>
-        </span>
-      </button>
-      <button title="Set Default" class="button is-small is-link" onClick="setDefault()">
-        <span class="icon is-small">
-          <i class="fas fa-code"></i>
-        </span>
-      </button>
-      <button title="Direct Download" class="button is-small is-link" onClick="launchDownloadModal()">
-        <span class="icon is-small">
-          <i class="fas fa-download"></i>
-        </span>
-      </button>
-      <button title="GitHub Download" class="button is-small is-link" onClick="launchGitHubRepoModal()">
-        <span class="icon is-small">
-          <i class="fab fa-github"></i>
-        </span>
-      </button>
-      <button title="Local Save" class="button is-small is-link" onClick="saveLocal()">
-        <span class="icon is-small">
-          <i class="fas fa-save"></i>
-        </span>
-      </button>
-      <button title="Commit to GitHub" class="button is-small is-link" onClick="launchGitHubRepoModalForCommit()">
-        <span class="icon is-small">
-          <i class="fas fa-code-branch"></i>
-        </span>
-      </button>
-      <button title="Check Compiler Usage" id="checkUsageButton" class="button is-small is-link" onClick="checkUsage()">
-        <span class="icon is-small">
-          <i class="fas fa-dollar-sign"></i>
-        </span>
-      </button>
-      <button title="Execute Code" id="executeCodeButton" class="button is-small is-link" onClick="sendCodeForExecution()">
-        <span class="icon is-small">
-          <i class="fas fa-play"></i>
-        </span>
-      </button>
+    <div class="level level-button-bar">
+      <div class="level-left">
+        <div class="level-item buttons has-addons level-item-button">
+          <button id="toggleColumnDesc" title="Minimize Description Column" class="button is-small is-link" value="min"
+            onClick="toggleColumnDesc()">
+            <span class="icon is-small">
+              <i id="descColMinBtnIcon" class="fas fa-minus"></i>
+            </span>
+          </button>
+          <button title="Clear Description" class="button is-small is-link" onClick="clearDesc()">
+            <span class="icon is-small">
+              <i class="far fa-trash-alt"></i>
+            </span>
+          </button>
+        </div>
+
+        <div class="level-item buttons has-addons level-item-button">
+          <button id="toggleCodeDesc" title="Minimize Code Column" class="button is-small is-link" value="min"
+            onClick="toggleColumnCode()">
+            <span class="icon is-small">
+              <i id="codeColMinBtnIcon" class="fas fa-minus"></i>
+            </span>
+          </button>
+          <button title="Clear Solution" class="button is-small is-link" onClick="clearSol()">
+            <span class="icon is-small">
+              <i class="far fa-trash-alt"></i>
+            </span>
+          </button>
+        </div>
+
+        <div class="level-item buttons has-addons level-item-button">
+          <button title="Select Language" class="button is-small is-link" onClick="openLanguageModal()">
+            <span class="icon is-small">
+              <i class="fas fa-language"></i>
+            </span>
+          </button>
+          <button title="Check Compiler Usage" id="checkUsageButton" class="button is-small is-link"
+            onClick="checkUsage()">
+            <span class="icon is-small">
+              <i class="fas fa-dollar-sign"></i>
+            </span>
+          </button>
+          <button title="Execute Code" id="executeCodeButton" class="button is-small is-link"
+            onClick="sendCodeForExecution()">
+            <span class="icon is-small">
+              <i class="fas fa-play"></i>
+            </span>
+          </button>
+        </div>
+
+        <div class="level-item buttons has-addons level-item-button">
+          <button title="Set Default" class="button is-small is-link" onClick="setDefault()">
+            <span class="icon is-small">
+              <i class="fas fa-code"></i>
+            </span>
+          </button>
+          <button title="Direct Download" class="button is-small is-link" onClick="launchDownloadModal()">
+            <span class="icon is-small">
+              <i class="fas fa-download"></i>
+            </span>
+          </button>
+          <button title="Local Save" class="button is-small is-link" onClick="saveLocal()">
+            <span class="icon is-small">
+              <i class="fas fa-save"></i>
+            </span>
+          </button>
+        </div>
+
+        <div class="level-item buttons has-addons level-item-button">
+          <button title="Download from GitHub" class="button is-small is-link" onClick="launchGitHubRepoModal()">
+            <span class="icon is-small">
+              <i class="fab fa-github"></i>
+            </span>
+          </button>
+          <button title="Commit to GitHub" class="button is-small is-link" onClick="launchGitHubRepoModalForCommit()">
+            <span class="icon is-small">
+              <i class="fas fa-code-branch"></i>
+            </span>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="columns columns-wrapper">
       <div id="descColumn" class="column is-4 column-wrapper">
@@ -137,7 +156,8 @@
         <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeLanguageModal()"></button>
       </header>
       <section id="languageModalContent" class="modal-card-body"></section>
-      <footer class="modal-card-foot"><button id="closeLangModalButton" class="button is-link" onClick="closeLanguageModal()">Close</button></footer>
+      <footer class="modal-card-foot"><button id="closeLangModalButton" class="button is-link"
+          onClick="closeLanguageModal()">Close</button></footer>
     </div>
   </div>
 
@@ -151,7 +171,8 @@
       </header>
       <section id="outputModalContent" class="modal-card-body"></section>
       <footer class="modal-card-foot">
-        <button title="Close Modal" id="closeOutputModalButton" class="button is-link" onClick="closeOutputModal()">Close</button>
+        <button title="Close Modal" id="closeOutputModalButton" class="button is-link"
+          onClick="closeOutputModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -184,8 +205,10 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button title="Download Content" id="downloadButton" class="button is-link" onClick="download()">Download</button>
-        <button title="Close Modal" id="closeDownloadModalButton" class="button is-link" onClick="closeDownloadModal()">Close</button>
+        <button title="Download Content" id="downloadButton" class="button is-link"
+          onClick="download()">Download</button>
+        <button title="Close Modal" id="closeDownloadModalButton" class="button is-link"
+          onClick="closeDownloadModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -196,14 +219,16 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p id="gitHubRepoModalTitleP" class="modal-card-title">GitHub Repositories</p>
-        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeGitHubRepoModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close"
+          onClick="closeGitHubRepoModal()"></button>
       </header>
       <section id="gitHubRepoModalBody" class="modal-card-body">
         <button title="Loading..." id="gitHubRepoLoadingButton" class="button is-loading">Loading...</button>
         <div id="gitHubRepoModalContent"></div>
       </section>
       <footer class="modal-card-foot">
-        <button title="Close/Back" id="gitHubRepoBackButton" class="button is-link" onClick="backGitHubRepoModal()">Close</button>
+        <button title="Close/Back" id="gitHubRepoBackButton" class="button is-link"
+          onClick="backGitHubRepoModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -214,7 +239,8 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p id="gitHubCommitModalTitleP" class="modal-card-title">GitHub Commit</p>
-        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeGitHubCommitModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close"
+          onClick="closeGitHubCommitModal()"></button>
       </header>
       <section id="gitHubCommitModalBody" class="modal-card-body">
         <article class="message">
@@ -252,7 +278,8 @@
       </section>
       <footer class="modal-card-foot">
         <button title="Commit" id="gitHubCommitButton" class="button is-link" onClick="doGitHubCommit()">Commit</button>
-        <button title="Close" id="gitHubCommitCloseButton" class="button is-link" onClick="closeGitHubCommitModal()">Close</button>
+        <button title="Close" id="gitHubCommitCloseButton" class="button is-link"
+          onClick="closeGitHubCommitModal()">Close</button>
       </footer>
     </div>
   </div>

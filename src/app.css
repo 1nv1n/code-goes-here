@@ -51,7 +51,14 @@ body {
 
 .level-button-bar {
   margin: 0px !important;
-  padding: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 0px;
+}
+
+.level-item-button {
+  margin-bottom: 0px !important;
 }
 
 .columns-wrapper {
