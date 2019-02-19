@@ -1,20 +1,32 @@
-# [Problem]()
+# [Problem](Link)
 
 ## Description
 
-Create a greet function
+The description of the problem goes into this section.
 
-## Example
+eg: Create a greet function.
+
+### Notes
+
+Any notes that further clarify the problem at hand go into this section.
+eg: Print the greeting to standard output.
+
+### Example
+
+Examples, both for the input as well as expected output go into this section.
+
+Sample Input: None.
 
 Sample output: `Hello from Monaco!`
 
 ## Analysis
 
-
-## Notes
-
+Algorithm analysis & breakdown; design decisions, trade-off discussion points, alternate approaches & time-space complextity analysis go into this section.
 
 ## Solution
+
+This section links to the Solution.
+
  - [C](Solution.c)
  - [C++](Solution.cpp)
  - [Java](Solution.java)

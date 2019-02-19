@@ -1,14 +1,34 @@
+/**
+ * Class that contains the logic & implementation for the provided problem's solution.
+ */
 class CodeGoesHere {
-	String greetStr = "Hello from Monaco!";
+  // The greeting.
+  String greetStr = "Hello from Monaco!";
 
-	public String greet() {
-		return this.greetStr;
-	}
+  /**
+   * Return the stored greeting.
+   * @return {@link String} consisting of the greeting.
+   */
+  public String greet() {
+    return this.greetStr;
+  }
 }
 
-public class SolutionDriver {
-	public static void main(String[] args) {
-		CodeGoesHere cGH = new CodeGoesHere();
-		System.out.println(cGH.greet());
-	}
+/**
+ * This is the driver of the solution.
+ * This class is not expected to hold any logic,
+ *  but rather to call into the method(s) from {@link CodeGoesHere} to perform the expected actions.
+ */
+public class Solution {
+  /**
+   * The entry point to executing the solution.
+   * @param args {@link String} argument array from the standard input.
+   */
+  public static void main(String[] args) {
+    // Create a new instance of the class that implements the logic.
+    CodeGoesHere cGH = new CodeGoesHere();
+
+    // Print the expected output to the standard output.
+    System.out.println(cGH.greet());
+  }
 }

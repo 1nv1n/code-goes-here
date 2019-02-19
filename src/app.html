@@ -106,7 +106,7 @@
         </div>
 
         <div class="level-item buttons has-addons level-item-button">
-          <button title="Set Default" class="button is-small is-link" onClick="setDefault()">
+          <button id="setLocalDefBtn" title="Set Local Default" class="button is-small is-link" onClick="setLocalDefault()">
             <span class="icon is-small">
               <i class="fas fa-code"></i>
             </span>
@@ -124,6 +124,11 @@
         </div>
 
         <div class="level-item buttons has-addons level-item-button">
+          <button title="Set Remote Default" class="button is-small is-link" onClick="setRemoteDefault()">
+            <span class="icon is-small">
+              <i class="fas fa-code"></i>
+            </span>
+          </button>
           <button title="Download from GitHub" class="button is-small is-link" onClick="launchGitHubRepoModal()">
             <span class="icon is-small">
               <i class="fab fa-github"></i>

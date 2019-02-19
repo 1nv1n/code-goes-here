@@ -106,10 +106,19 @@ function toggleColumnCode() {
 }
 
 /**
- * Set the defaults (description & solution) to the editors.
+ * Set the local defaults (description & solution) to the editors.
+ */
+function setLocalDefault() {
+  document.getElementById("setLocalDefBtn").classList.add("is-loading");
+  ipcRenderer.send("set-desc-local");
+  ipcRenderer.send("set-sol-local", 1);
+}
+
+/**
+ * Set the remote defaults (description & solution) to the editors.
  * TODO: Make this configurable.
  */
-function setDefault() {
+function setRemoteDefault() {
   ipcRenderer.send("download", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/README.md", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/Solution.java");
 }
 
@@ -455,7 +464,9 @@ ipcRenderer.on("usage-checked", (event, code) => {
  * Handle the description template recieved event.
  */
 ipcRenderer.on("desc-template", (event, desc) => {
-  document.getElementById("resetDescButton").classList.remove("is-loading");
+  if (document.getElementById("setLocalDefBtn").classList.contains("is-loading")) {
+    document.getElementById("setLocalDefBtn").classList.remove("is-loading");
+  }
   descEditor.setValue(desc);
 });
 
@@ -463,7 +474,9 @@ ipcRenderer.on("desc-template", (event, desc) => {
  * Handle the solution template recieved event.
  */
 ipcRenderer.on("sol-template", (event, code) => {
-  document.getElementById("resetSolButton").classList.remove("is-loading");
+  if (document.getElementById("setLocalDefBtn").classList.contains("is-loading")) {
+    document.getElementById("setLocalDefBtn").classList.remove("is-loading");
+  }
   codeEditor.setValue(code);
 });
 

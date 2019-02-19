@@ -134,13 +134,13 @@ ipcMain.on("download", (event, descLink, solutionLink) => {
   });
 });
 
-ipcMain.on("reset-desc", (event) => {
+ipcMain.on("set-desc-local", (event) => {
   fileSystem.readFile(`${__dirname}/template/README.md`, "utf8", (err, data) => {
     mainWindow.webContents.send("desc-template", data);
   });
 });
 
-ipcMain.on("reset-sol", (event, solLangFlag) => {
+ipcMain.on("set-sol-local", (event, solLangFlag) => {
   const path = (solLangFlag === 1) ? `${__dirname}/template/Solution.java` : `${__dirname}/template/Solution`;
   fileSystem.readFile(path, "utf8", (err, data) => {
     mainWindow.webContents.send("sol-template", data);
