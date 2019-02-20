@@ -1,7 +1,3 @@
-# Ignore API Credentials
-src/jdoodle/credentials.js
-src/github/credentials.js
-
 # Ignore Dependencies
 node_modules
 
