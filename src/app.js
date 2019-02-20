@@ -2,6 +2,7 @@ import {
   app, ipcMain, dialog, screen, BrowserWindow,
 } from "electron";
 import { enableLiveReload } from "electron-compile";
+import { Preference } from "./preferences/preference";
 
 enableLiveReload();
 
@@ -13,21 +14,42 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
 // JS Imports
 const GitHubInstance = require("github-api");
 const fileSystem = require("fs");
-const compileJS = require("./jdoodle/compile");
-const usageJS = require("./jdoodle/usage");
+const settings = require("electron-settings");
+const jDoodleJS = require("./jdoodle/jDoodle");
 const gitHubJS = require("./github/gitHub");
-const gitHubCredentials = require("./github/credentials");
-
-const gitHub = new GitHubInstance({
-  token: gitHubCredentials.TOKEN,
-});
-const gHUser = gitHub.getUser();
 
 let repository;
+let pref;
+let gitHub;
+let gHUser;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+const readPref = () => {
+  pref = new Preference();
+
+  if (settings.has("jDoodleClientID")) {
+    pref.jDoodleClientID = settings.get("jDoodleClientID");
+  }
+
+  if (settings.has("jDoodleClientSecret")) {
+    pref.jDoodleClientSecret = settings.get("jDoodleClientSecret");
+  }
+
+  if (settings.has("gitHubToken")) {
+    pref.gitHubToken = settings.get("gitHubToken");
+    gitHub = new GitHubInstance({
+      token: pref.gitHubToken,
+    });
+    gHUser = gitHub.getUser();
+  }
+};
+
+const mainWindowReady = () => {
+  mainWindow.webContents.send("main-window-ready", pref);
+};
 
 const createWindow = () => {
   // Create the browser window.
@@ -60,12 +82,19 @@ const createWindow = () => {
   mainWindow.once("ready-to-show", () => {
     mainWindow.show();
   });
+
+  mainWindow.webContents.on("did-finish-load", mainWindowReady);
+};
+
+const initiateWindowLoad = () => {
+  readPref();
+  createWindow();
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", initiateWindowLoad);
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
@@ -84,8 +113,15 @@ app.on("activate", () => {
   }
 });
 
+ipcMain.on("save-pref", (event, updatedPref) => {
+  pref = updatedPref;
+  settings.set("jDoodleClientID", pref.jDoodleClientID);
+  settings.set("jDoodleClientSecret", pref.jDoodleClientSecret);
+  settings.set("gitHubToken", pref.gitHubToken);
+});
+
 ipcMain.on("execute-code", (event, editorText, language, versionIdx) => {
-  const compilePromise = compileJS.jDoodleCompile(editorText, language, versionIdx);
+  const compilePromise = jDoodleJS.execute(editorText, language, versionIdx, pref);
   const messageBoxProp = {
     type: "info",
     buttons: ["Cool"],
@@ -107,7 +143,7 @@ ipcMain.on("execute-code", (event, editorText, language, versionIdx) => {
 });
 
 ipcMain.on("check-usage", (event) => {
-  const usageCheckPromise = usageJS.jDoodleCreditSpent();
+  const usageCheckPromise = jDoodleJS.checkSpentCredit(pref);
   const messageBoxProp = {
     type: "info",
     buttons: ["Cool"],

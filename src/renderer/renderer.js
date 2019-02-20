@@ -1,5 +1,6 @@
 import { ipcRenderer } from "electron";
 import { Repository } from "./github/repository";
+import { Preference } from "./preferences/preference";
 
 const { BrowserWindow } = require("electron").remote;
 
@@ -7,6 +8,7 @@ const repoInfo = new Repository();
 
 let isAppMaximized = false;
 let isInDownLoadMode = true;
+let pref = new Preference();
 
 /**
  * Minimize the App.
@@ -102,6 +104,42 @@ function toggleColumnCode() {
 
     document.getElementById("toggleCodeDesc").value = "min";
     document.getElementById("toggleCodeDesc").title = "Minimize Code Column";
+  }
+}
+
+function switchToCredTab() {
+  if (document.getElementById("prefTab").classList.contains("is-active")) {
+    document.getElementById("prefTab").classList.remove("is-active");
+  }
+
+  if (!document.getElementById("prefTabContent").classList.contains("is-hidden")) {
+    document.getElementById("prefTabContent").classList.add("is-hidden");
+  }
+
+  if (!document.getElementById("credTab").classList.contains("is-active")) {
+    document.getElementById("credTab").classList.add("is-active");
+  }
+
+  if (document.getElementById("credTabContent").classList.contains("is-hidden")) {
+    document.getElementById("credTabContent").classList.remove("is-hidden");
+  }
+}
+
+function switchToPrefTab() {
+  if (document.getElementById("credTab").classList.contains("is-active")) {
+    document.getElementById("credTab").classList.remove("is-active");
+  }
+
+  if (!document.getElementById("credTabContent").classList.contains("is-hidden")) {
+    document.getElementById("credTabContent").classList.add("is-hidden");
+  }
+
+  if (!document.getElementById("prefTab").classList.contains("is-active")) {
+    document.getElementById("prefTab").classList.add("is-active");
+  }
+
+  if (document.getElementById("prefTabContent").classList.contains("is-hidden")) {
+    document.getElementById("prefTabContent").classList.remove("is-hidden");
   }
 }
 
@@ -205,6 +243,46 @@ function setCommitToModal(descCommit, solCommit) {
   document.getElementById("gitHubCommitButton").classList.remove("is-loading");
   document.getElementById("commitSHA1").value = descCommit;
   document.getElementById("commitSHA2").value = solCommit;
+}
+
+/**
+ * Launch the settings modal
+ */
+function launchSettingModal() {
+  document.getElementById("settingModal").classList.add("is-active");
+  document.documentElement.classList.add("is-clipped");
+}
+
+/**
+ * Close the settings modal
+ */
+function closeSettingModal() {
+  document.getElementById("settingModal").classList.remove("is-active");
+  document.documentElement.classList.remove("is-clipped");
+}
+
+/**
+ * Save settings.
+ */
+function saveSettings() {
+  pref.jDoodleClientID = document.getElementById("jDoodleClientIDInput").value;
+  pref.jDoodleClientSecret = document.getElementById("jDoodleClientSecretInput").value;
+  pref.gitHubToken = document.getElementById("gitHubTokenInput").value;
+
+  ipcRenderer.send("save-pref", pref);
+
+  toggleJDoodleButtons();
+  toggleGitHubButtons();
+  closeSettingModal();
+}
+
+/**
+ * Reset settings.
+ */
+function resetSettings() {
+  document.getElementById("jDoodleClientIDInput").value = "";
+  document.getElementById("jDoodleClientSecretInput").value = "";
+  document.getElementById("gitHubTokenInput").value = "";
 }
 
 /**
@@ -317,7 +395,7 @@ function sendCodeToMainProcess(editorText, language, versionIdx) {
  * Check credit usage.
  */
 function checkUsage() {
-  document.getElementById("checkUsageButton").classList.add("is-loading");
+  document.getElementById("jDoodleUsageBtn").classList.add("is-loading");
   ipcRenderer.send("check-usage");
 }
 
@@ -431,10 +509,57 @@ function populateContentList(contentList) {
 }
 
 /**
+ * Toggles the enabled/disabled state of the buttons related to JDoodle.
+ */
+function toggleJDoodleButtons() {
+  if (pref.jDoodleClientSecret.length > 0 && pref.jDoodleClientID.length > 0) {
+    document.getElementById("jDoodleLangBtn").disabled = false;
+    document.getElementById("jDoodleUsageBtn").disabled = false;
+    document.getElementById("jDoodleExecuteBtn").disabled = false;
+  } else {
+    document.getElementById("jDoodleLangBtn").disabled = true;
+    document.getElementById("jDoodleUsageBtn").disabled = true;
+    document.getElementById("jDoodleExecuteBtn").disabled = true;
+  }
+}
+
+/**
+ * Toggles the enabled/disabled state of the buttons related to GitHub.
+ */
+function toggleGitHubButtons() {
+  if (pref.gitHubToken.length) {
+    document.getElementById("gHDownloadBtn").disabled = false;
+    document.getElementById("gHCommitBtn").disabled = false;
+  } else {
+    document.getElementById("gHDownloadBtn").disabled = true;
+    document.getElementById("gHCommitBtn").disabled = true;
+  }
+}
+
+/**
+ * Sets the preference values.
+ */
+function setLocalPref() {
+  document.getElementById("jDoodleClientIDInput").value = pref.jDoodleClientID;
+  document.getElementById("jDoodleClientSecretInput").value = pref.jDoodleClientSecret;
+  document.getElementById("gitHubTokenInput").value = pref.gitHubToken;
+}
+
+/**
+ * Handle the "main-window-ready" event.
+ */
+ipcRenderer.on("main-window-ready", (event, savedPref) => {
+  pref = savedPref;
+  toggleJDoodleButtons();
+  toggleGitHubButtons();
+  setLocalPref();
+});
+
+/**
  * Handle the "compiled" event.
  */
 ipcRenderer.on("compiled", (event, code) => {
-  document.getElementById("executeCodeButton").classList.remove("is-loading");
+  document.getElementById("jDoodleExecuteBtn").classList.remove("is-loading");
 });
 
 /**
@@ -457,7 +582,7 @@ ipcRenderer.on("downloaded", (event, values) => {
  * Handle the "check-usage" event.
  */
 ipcRenderer.on("usage-checked", (event, code) => {
-  document.getElementById("checkUsageButton").classList.remove("is-loading");
+  document.getElementById("jDoodleUsageBtn").classList.remove("is-loading");
 });
 
 /**

@@ -58,8 +58,15 @@
     <div class="level level-button-bar">
       <div class="level-left">
         <div class="level-item buttons has-addons level-item-button">
-          <button id="toggleColumnDesc" title="Minimize Description Column" class="button is-small is-link" value="min"
-            onClick="toggleColumnDesc()">
+          <button id="settingBtn" title="Preferences & Settings" class="button is-small is-link" onClick="launchSettingModal()">
+            <span class="icon is-small">
+              <i class="fas fa-cogs"></i>
+            </span>
+          </button>
+        </div>
+
+        <div class="level-item buttons has-addons level-item-button">
+          <button id="toggleColumnDesc" title="Minimize Description Column" class="button is-small is-link" value="min" onClick="toggleColumnDesc()">
             <span class="icon is-small">
               <i id="descColMinBtnIcon" class="fas fa-minus"></i>
             </span>
@@ -72,8 +79,7 @@
         </div>
 
         <div class="level-item buttons has-addons level-item-button">
-          <button id="toggleCodeDesc" title="Minimize Code Column" class="button is-small is-link" value="min"
-            onClick="toggleColumnCode()">
+          <button id="toggleCodeDesc" title="Minimize Code Column" class="button is-small is-link" value="min" onClick="toggleColumnCode()">
             <span class="icon is-small">
               <i id="codeColMinBtnIcon" class="fas fa-minus"></i>
             </span>
@@ -86,19 +92,17 @@
         </div>
 
         <div class="level-item buttons has-addons level-item-button">
-          <button title="Select Language" class="button is-small is-link" onClick="openLanguageModal()">
+          <button id="jDoodleLangBtn" title="Select Language" class="button is-small is-link" onClick="openLanguageModal()" disabled>
             <span class="icon is-small">
               <i class="fas fa-language"></i>
             </span>
           </button>
-          <button title="Check Compiler Usage" id="checkUsageButton" class="button is-small is-link"
-            onClick="checkUsage()">
+          <button id="jDoodleUsageBtn" title="Check Compiler Usage" id="checkUsageButton" class="button is-small is-link" onClick="checkUsage()" disabled>
             <span class="icon is-small">
               <i class="fas fa-dollar-sign"></i>
             </span>
           </button>
-          <button title="Execute Code" id="executeCodeButton" class="button is-small is-link"
-            onClick="sendCodeForExecution()">
+          <button id="jDoodleExecuteBtn" title="Execute Code" id="executeCodeButton" class="button is-small is-link" onClick="sendCodeForExecution()" disabled>
             <span class="icon is-small">
               <i class="fas fa-play"></i>
             </span>
@@ -129,12 +133,12 @@
               <i class="fas fa-code"></i>
             </span>
           </button>
-          <button title="Download from GitHub" class="button is-small is-link" onClick="launchGitHubRepoModal()">
+          <button id="gHDownloadBtn" title="Download from GitHub" class="button is-small is-link" onClick="launchGitHubRepoModal()" disabled>
             <span class="icon is-small">
               <i class="fab fa-github"></i>
             </span>
           </button>
-          <button title="Commit to GitHub" class="button is-small is-link" onClick="launchGitHubRepoModalForCommit()">
+          <button id="gHCommitBtn" title="Commit to GitHub" class="button is-small is-link" onClick="launchGitHubRepoModalForCommit()" disabled>
             <span class="icon is-small">
               <i class="fas fa-code-branch"></i>
             </span>
@@ -152,6 +156,74 @@
     </div>
   </div>
 
+  <!-- Settings Modal -->
+  <div id="settingModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Preferences & Settings</p>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeSettingModal()"></button>
+      </header>
+      <section id="settingModalContent" class="modal-card-body">
+        <div class="tabs is-centered is-boxed" id="tabs">
+          <ul>
+            <li id="credTab" class="is-active" data-tab="1">
+              <a onClick="switchToCredTab()">
+                <span class="icon is-small"><i class="fas fa-key" aria-hidden="true"></i></span>
+                <span>Credentials</span>
+              </a>
+            </li>
+            <li id="prefTab" data-tab="2">
+              <a onClick="switchToPrefTab()">
+                <span class="icon is-small"><i class="fas fa-sliders-h" aria-hidden="true"></i></span>
+                <span>Preferences</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div id="tabContent">
+          <div id="credTabContent">
+            <div class="field">
+              <p class="control has-icons-left">
+                <input id="jDoodleClientIDInput" class="input" type="password" placeholder="jDoodle Client ID">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </p>
+            </div>
+            <div class="field">
+              <p class="control has-icons-left">
+                <input id="jDoodleClientSecretInput" class="input" type="password" placeholder="jDoodle Client Secret">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </p>
+            </div>
+            <div class="field">
+              <p class="control has-icons-left">
+                <input id="gitHubTokenInput" class="input" type="password" placeholder="GitHub Access Token">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </p>
+            </div>
+          </div>
+          <div id="prefTabContent" class="is-hidden">
+            <label class="checkbox">
+              <input type="checkbox">
+              There is more work to do.
+            </label>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button title="Save" id="saveSettingsButton" class="button is-link" onClick="saveSettings()">Save</button>
+        <button title="Reset" id="resetSettingsModalButton" class="button is-link" onClick="resetSettings()">Reset</button>
+        <button title="Close" id="closeDownloadModalButton" class="button is-link" onClick="closeSettingModal()">Close</button>
+      </footer>
+    </div>
+  </div>
+
   <!-- Language Selection Modal -->
   <div id="languageModal" class="modal">
     <div class="modal-background"></div>
@@ -161,8 +233,9 @@
         <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeLanguageModal()"></button>
       </header>
       <section id="languageModalContent" class="modal-card-body"></section>
-      <footer class="modal-card-foot"><button id="closeLangModalButton" class="button is-link"
-          onClick="closeLanguageModal()">Close</button></footer>
+      <footer class="modal-card-foot">
+        <button id="closeLangModalButton" class="button is-link" onClick="closeLanguageModal()">Close</button>
+      </footer>
     </div>
   </div>
 
@@ -176,8 +249,7 @@
       </header>
       <section id="outputModalContent" class="modal-card-body"></section>
       <footer class="modal-card-foot">
-        <button title="Close Modal" id="closeOutputModalButton" class="button is-link"
-          onClick="closeOutputModal()">Close</button>
+        <button title="Close Modal" id="closeOutputModalButton" class="button is-link" onClick="closeOutputModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -210,10 +282,8 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button title="Download Content" id="downloadButton" class="button is-link"
-          onClick="download()">Download</button>
-        <button title="Close Modal" id="closeDownloadModalButton" class="button is-link"
-          onClick="closeDownloadModal()">Close</button>
+        <button title="Download Content" id="downloadButton" class="button is-link" onClick="download()">Download</button>
+        <button title="Close Modal" id="closeDownloadModalButton" class="button is-link" onClick="closeDownloadModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -224,16 +294,14 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p id="gitHubRepoModalTitleP" class="modal-card-title">GitHub Repositories</p>
-        <button title="Close Modal" class="delete is-danger" aria-label="close"
-          onClick="closeGitHubRepoModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeGitHubRepoModal()"></button>
       </header>
       <section id="gitHubRepoModalBody" class="modal-card-body">
         <button title="Loading..." id="gitHubRepoLoadingButton" class="button is-loading">Loading...</button>
         <div id="gitHubRepoModalContent"></div>
       </section>
       <footer class="modal-card-foot">
-        <button title="Close/Back" id="gitHubRepoBackButton" class="button is-link"
-          onClick="backGitHubRepoModal()">Close</button>
+        <button title="Close/Back" id="gitHubRepoBackButton" class="button is-link" onClick="backGitHubRepoModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -244,8 +312,7 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p id="gitHubCommitModalTitleP" class="modal-card-title">GitHub Commit</p>
-        <button title="Close Modal" class="delete is-danger" aria-label="close"
-          onClick="closeGitHubCommitModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeGitHubCommitModal()"></button>
       </header>
       <section id="gitHubCommitModalBody" class="modal-card-body">
         <article class="message">
@@ -267,12 +334,10 @@
           <input id="solPathInput" class="input" type="text" placeholder="Path" />
         </div>
         <div class="field">
-          <label class="label">Commit Message</label> <input id="commitMessageInput" class="input" type="text"
-            placeholder="Commit Message" />
+          <label class="label">Commit Message</label> <input id="commitMessageInput" class="input" type="text" placeholder="Commit Message" />
         </div>
         <div class="field">
-          <label class="label is-small">Commit SHAs</label> <input id="commitSHA1" class="input is-small" type="text"
-            disabled />
+          <label class="label is-small">Commit SHAs</label> <input id="commitSHA1" class="input is-small" type="text" disabled />
           <input id="commitSHA2" class="input is-small" type="text" disabled />
         </div>
         <div class="field">
@@ -283,8 +348,7 @@
       </section>
       <footer class="modal-card-foot">
         <button title="Commit" id="gitHubCommitButton" class="button is-link" onClick="doGitHubCommit()">Commit</button>
-        <button title="Close" id="gitHubCommitCloseButton" class="button is-link"
-          onClick="closeGitHubCommitModal()">Close</button>
+        <button title="Close" id="gitHubCommitCloseButton" class="button is-link" onClick="closeGitHubCommitModal()">Close</button>
       </footer>
     </div>
   </div>

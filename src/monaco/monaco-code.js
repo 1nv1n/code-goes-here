@@ -12,7 +12,7 @@ let currLang = ["java", "Java (JDK 1.8.0_66)", "0", "java"];
  * Send the code to the renderer to be sent to the main process for execution.
  */
 function sendCodeForExecution() {
-  document.getElementById("executeCodeButton").classList.add("is-loading");
+  document.getElementById("jDoodleExecuteBtn").classList.add("is-loading");
   sendCodeToMainProcess(codeEditor.getValue(), currLang[0], currLang[2]);
 }
 
