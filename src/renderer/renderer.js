@@ -268,11 +268,15 @@ function saveSettings() {
   pref.jDoodleClientID = document.getElementById("jDoodleClientIDInput").value;
   pref.jDoodleClientSecret = document.getElementById("jDoodleClientSecretInput").value;
   pref.gitHubToken = document.getElementById("gitHubTokenInput").value;
+  pref.leetCodeUsername = document.getElementById("leetCodeUserInput").value;
+  pref.leetCodePassword = document.getElementById("leetCodePassInput").value;
 
   ipcRenderer.send("save-pref", pref);
+  console.log(pref);
 
   toggleJDoodleButtons();
   toggleGitHubButtons();
+  toggleLeetCodeButtons();
   closeSettingModal();
 }
 
@@ -283,6 +287,8 @@ function resetSettings() {
   document.getElementById("jDoodleClientIDInput").value = "";
   document.getElementById("jDoodleClientSecretInput").value = "";
   document.getElementById("gitHubTokenInput").value = "";
+  document.getElementById("leetCodeUserInput").value = "";
+  document.getElementById("leetCodePassInput").value = "";
 }
 
 /**
@@ -527,12 +533,29 @@ function toggleJDoodleButtons() {
  * Toggles the enabled/disabled state of the buttons related to GitHub.
  */
 function toggleGitHubButtons() {
-  if (pref.gitHubToken.length) {
+  if (pref.gitHubToken.length > 0) {
     document.getElementById("gHDownloadBtn").disabled = false;
     document.getElementById("gHCommitBtn").disabled = false;
   } else {
     document.getElementById("gHDownloadBtn").disabled = true;
     document.getElementById("gHCommitBtn").disabled = true;
+  }
+}
+
+/**
+ * Toggles the enabled/disabled state of the buttons related to LeetCode.
+ */
+function toggleLeetCodeButtons() {
+  if (pref.leetCodeUsername.length > 0 && pref.leetCodePassword.length > 0) {
+    document.getElementById("lCodeListButton").disabled = false;
+    document.getElementById("lCodeStatButton").disabled = false;
+    document.getElementById("lCodeSubmitButton").disabled = false;
+    document.getElementById("lCodeLogOutButton").disabled = false;
+  } else {
+    document.getElementById("lCodeListButton").disabled = true;
+    document.getElementById("lCodeStatButton").disabled = true;
+    document.getElementById("lCodeSubmitButton").disabled = true;
+    document.getElementById("lCodeLogOutButton").disabled = true;
   }
 }
 
@@ -545,6 +568,22 @@ function setLocalPref() {
   document.getElementById("gitHubTokenInput").value = pref.gitHubToken;
 }
 
+function getLeetCodeCLIVersion() {
+  ipcRenderer.send("leetcode-command", "version");
+}
+
+function listLeetCodeProblems() {
+  ipcRenderer.send("leetcode-command", "list");
+}
+
+function leetCodeLogOut() {
+  ipcRenderer.send("leetcode-command", "user -L");
+}
+
+function leetCodeClearCache() {
+  ipcRenderer.send("leetcode-command", "cache -d");
+}
+
 /**
  * Handle the "main-window-ready" event.
  */
@@ -552,6 +591,7 @@ ipcRenderer.on("main-window-ready", (event, savedPref) => {
   pref = savedPref;
   toggleJDoodleButtons();
   toggleGitHubButtons();
+  toggleLeetCodeButtons();
   setLocalPref();
 });
 
@@ -656,4 +696,10 @@ ipcRenderer.on("got-sol", (event, content) => {
  */
 ipcRenderer.on("committed", (event, descCommit, solCommit) => {
   setCommitToModal(descCommit, solCommit);
+});
+
+ipcRenderer.on("leetcode", (event, command, stdout, stderr) => {
+  console.log(command);
+  console.log(stdout);
+  console.log(stderr);
 });

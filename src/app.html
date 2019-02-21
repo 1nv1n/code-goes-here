@@ -144,6 +144,34 @@
             </span>
           </button>
         </div>
+
+        <div class="level-item buttons has-addons level-item-button">
+          <button id="lCodeCLIVersion" title="leetcode-cli Version" class="button is-small is-link" onClick="getLeetCodeCLIVersion()">
+            <span class="icon is-small">
+              <i class="fas fa-info-circle"></i>
+            </span>
+          </button>
+          <button id="lCodeListButton" title="List LeetCode Problems" class="button is-small is-link" onClick="listLeetCodeProblems()" disabled>
+            <span class="icon is-small">
+              <i class="fas fa-list-ul"></i>
+            </span>
+          </button>
+          <button id="lCodeStatButton" title="LeetCode Statistics" class="button is-small is-link" onClick="getLeetCodeStatistics()" disabled>
+            <span class="icon is-small">
+              <i class="fas fa-chart-bar"></i>
+            </span>
+          </button>
+          <button id="lCodeSubmitButton" title="Submit to LeetCode" class="button is-small is-link" onClick="submitToLeetCode()" disabled>
+            <span class="icon is-small">
+              <i class="fas fa-share-square"></i>
+            </span>
+          </button>
+          <button id="lCodeLogOutButton" title="Log Out of LeetCode" class="button is-small is-link" onClick="leetCodeLogOut()" disabled>
+            <span class="icon is-small">
+              <i class="fas fa-sign-out-alt"></i>
+            </span>
+          </button>
+        </div>
       </div>
     </div>
     <div class="columns columns-wrapper">
@@ -202,6 +230,22 @@
             <div class="field">
               <p class="control has-icons-left">
                 <input id="gitHubTokenInput" class="input" type="password" placeholder="GitHub Access Token">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </p>
+            </div>
+            <div class="field">
+              <p class="control has-icons-left">
+                <input id="leetCodeUserInput" class="input" type="text" placeholder="LeetCode Username or E-Mail">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </p>
+            </div>
+            <div class="field">
+              <p class="control has-icons-left">
+                <input id="leetCodePassInput" class="input" type="password" placeholder="LeetCode Password">
                 <span class="icon is-small is-left">
                   <i class="fas fa-lock"></i>
                 </span>

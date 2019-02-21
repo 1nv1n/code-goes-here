@@ -11,12 +11,14 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
   app.quit();
 }
 
-// JS Imports
+const exec = require("child_process").exec;
 const GitHubInstance = require("github-api");
 const fileSystem = require("fs");
 const settings = require("electron-settings");
 const jDoodleJS = require("./jdoodle/jDoodle");
 const gitHubJS = require("./github/gitHub");
+
+const leetcode = "leetcode ";
 
 let repository;
 let pref;
@@ -44,6 +46,11 @@ const readPref = () => {
       token: pref.gitHubToken,
     });
     gHUser = gitHub.getUser();
+  }
+
+  if (settings.has("leetCodeUsername") && settings.has("leetCodePassword")) {
+    pref.leetCodeUsername = settings.get("leetCodeUsername");
+    pref.leetCodePassword = settings.get("leetCodePassword");
   }
 };
 
@@ -118,6 +125,8 @@ ipcMain.on("save-pref", (event, updatedPref) => {
   settings.set("jDoodleClientID", pref.jDoodleClientID);
   settings.set("jDoodleClientSecret", pref.jDoodleClientSecret);
   settings.set("gitHubToken", pref.gitHubToken);
+  settings.set("leetCodeUsername", pref.leetCodeUsername);
+  settings.set("leetCodePassword", pref.leetCodePassword);
 });
 
 ipcMain.on("execute-code", (event, editorText, language, versionIdx) => {
@@ -285,6 +294,26 @@ ipcMain.on("commit-github", (event, repoInfo, descTxt, solTxt, commitMessage) =>
     });
   });
 });
+
+ipcMain.on("leetcode-command", (event, command) => {
+  execute(leetcode.concat(command), (stdout, stderr) => {
+    mainWindow.webContents.send("leetcode", command, stdout, stderr);
+  });
+});
+
+/**
+ * Execute a command.
+ * @param {*} command
+ * @param {*} callback
+ */
+function execute(command, callback) {
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      console.log("Command: $command. Error: $err");
+    }
+    callback(stdout, stderr);
+  });
+}
 
 /**
  * A comparator to sort files & directories by name.
