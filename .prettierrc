@@ -1,6 +1,6 @@
 {
   "endOfLine": "lf",
-  "printWidth": 160,
+  "printWidth": 240,
   "proseWrap": "never",
   "semi": true,
   "singleQuote": false,
