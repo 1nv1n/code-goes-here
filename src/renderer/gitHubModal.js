@@ -179,9 +179,9 @@ function populateReposList(repoList) {
   document.getElementById("gitHubRepoModalTitleP").innerHTML = "GitHub Repositories";
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
-  const wrappingTagsDiv = createWrappingDiv("repoListDiv");
+  const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("repoListDiv");
   Object.keys(repoList).forEach(key => {
-    const repoButton = createSpanButton(repoList[key].name);
+    const repoButton = _globalCommonJS.createSpanButton(repoList[key].name);
     repoButton.onclick = () => {
       document.getElementById("gitHubRepoBackButton").innerHTML = "Back";
       getRepoContent(repoList[key].owner.login, repoList[key].name);
@@ -198,9 +198,9 @@ function populateBranchList(branchList) {
   document.getElementById("gitHubRepoModalTitleP").innerHTML = "Repository Branches";
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
-  const wrappingTagsDiv = createWrappingDiv("branchListDiv");
+  const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("branchListDiv");
   Object.keys(branchList).forEach(key => {
-    const branchButton = createSpanButton(branchList[key].name);
+    const branchButton = _globalCommonJS.createSpanButton(branchList[key].name);
     branchButton.onclick = () => {
       getBranchContent(branchList[key].name);
     };
@@ -216,10 +216,10 @@ function populateContentList(contentList) {
   document.getElementById("gitHubRepoModalTitleP").innerHTML = "Branch Content";
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
-  const wrappingTagsDiv = createWrappingDiv("contentListDiv");
-  const table = createTable("contentListTable", "contentListTableBody");
+  const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("contentListDiv");
+  const table = _globalCommonJS.createTable("contentListTable", "contentListTableBody");
   Object.keys(contentList).forEach(key => {
-    const tableRow = createContentRow(contentList[key]);
+    const tableRow = _globalCommonJS.createContentRow(contentList[key]);
     table.appendChild(tableRow);
   });
   wrappingTagsDiv.appendChild(table);

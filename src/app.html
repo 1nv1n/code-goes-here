@@ -27,12 +27,10 @@
 
   <!-- Renderer JS -->
   <script defer src="./renderer/renderer.js"></script>
-  <script defer src="./renderer/common.js"></script>
   <script defer src="./renderer/downloadModal.js"></script>
   <script defer src="./renderer/settingsModal.js"></script>
   <script defer src="./renderer/jDoodleModal.js"></script>
   <script defer src="./renderer/gitHubModal.js"></script>
-  <script defer src="./renderer/leetCodeModal.js"></script>
 
   <!-- Monaco Editor -->
   <script defer src="./monaco/monaco-description.js"></script>
@@ -159,7 +157,7 @@
 
         <!-- Collection of buttons for LeetCode related operations -->
         <div class="level-item buttons has-addons level-item-button">
-          <button id="lCodeCLIVersion" title="leetcode-cli Version" class="button is-small is-link" onClick="getLeetCodeCLIVersion()">
+          <button id="lCodeCLIVersion" title="leetcode-cli" class="button is-small is-link" onClick="launchLeetCodeModal()">
             <span class="icon is-small">
               <i class="fas fa-info-circle"></i>
             </span>
@@ -402,6 +400,34 @@
       <footer class="modal-card-foot">
         <button title="Commit" id="gitHubCommitButton" class="button is-link" onClick="doGitHubCommit()">Commit</button>
         <button title="Close" id="gitHubCommitCloseButton" class="button is-link" onClick="closeGitHubCommitModal()">Close</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- LeetCode Modal -->
+  <div id="leetCodeModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">LeetCode</p>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeLeetCodeModal()"></button>
+      </header>
+      <section id="leetCodeModalBody" class="modal-card-body">
+        <div class="field is-horizontal">
+          <div class="field-label is-small">
+            <label class="label">CLI Version</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div id="leetCodeVersionControl" class="control is-loading">
+                <input id="leetCodeVersion" class="input is-small" type="text" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button title="Close" id="closeLeetCodeButton" class="button is-link" onClick="closeLeetCodeModal()">Close</button>
       </footer>
     </div>
   </div>

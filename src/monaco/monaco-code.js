@@ -48,7 +48,7 @@ function updateLanguage(language) {
  * @param {*} language
  */
 function createLanguageButton(language) {
-  const span = createSpanButton(language[1]);
+  const span = _globalCommonJS.createSpanButton(language[1]);
   span.onclick = () => { updateLanguage(language); };
   return span;
 }
@@ -57,7 +57,7 @@ function createLanguageButton(language) {
  * Populate languages in the modal.
  */
 function populateLanguages() {
-  const wrappingTagsDiv = createWrappingDiv("languageButtonsDiv");
+  const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("languageButtonsDiv");
   Object.keys(languageArr).forEach((key) => {
     const languageTag = createLanguageButton(languageArr[key]);
     wrappingTagsDiv.appendChild(languageTag);

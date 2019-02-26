@@ -7,6 +7,8 @@ const { BrowserWindow } = require("electron").remote;
 const _globalIPCRenderer = ipcRenderer;
 const _globalRepoInfo = new Repository();
 const _globalPref = new Preference();
+const _globalCommonJS = require("./renderer/common");
+const _globalLeetCodeJS = require("./renderer/leetCodeModal");
 
 let isAppMaximized = false;
 let _globalIsInDownLoadMode = true;
@@ -93,9 +95,27 @@ _globalIPCRenderer.on("main-window-ready", (event, savedPref) => {
   setCurrentPref(savedPref);
   toggleJDoodleButtons();
   toggleGitHubButtons();
-  toggleLeetCodeButtons();
+  _globalLeetCodeJS.toggleLeetCodeButtons();
   setLocalPref();
 });
+
+/**
+ * Launch the LeetCode Modal
+ */
+function launchLeetCodeModal() {
+  _globalIPCRenderer.send("leetcode-version");
+  _globalIPCRenderer.send("leetcode-user");
+  document.getElementById("leetCodeModal").classList.add("is-active");
+  document.documentElement.classList.add("is-clipped");
+}
+
+/**
+ * Close the LeetCode modal
+ */
+function closeLeetCodeModal() {
+  document.getElementById("leetCodeModal").classList.remove("is-active");
+  document.documentElement.classList.remove("is-clipped");
+}
 
 /**
  * Handle the "compiled" event.
@@ -201,10 +221,35 @@ _globalIPCRenderer.on("committed", (event, descCommit, solCommit) => {
 });
 
 /**
- * Handle the LeetCode CLI response.
+ * Handle the LeetCode CLI version response.
+ */
+_globalIPCRenderer.on("leetcode-version", (event, stdout, stderr) => {
+  if (document.getElementById("leetCodeVersionControl").classList.contains("is-loading")) {
+    document.getElementById("leetCodeVersionControl").classList.remove("is-loading");
+  }
+  document.getElementById("leetCodeVersion").value = stdout;
+});
+
+/**
+ * Handle the LeetCode CLI user response.
+ */
+_globalIPCRenderer.on("leetcode-version", (event, stdout, stderr) => {
+  console.log(stdout);
+  console.log(stderr);
+});
+
+/**
+ * Handle the LeetCode CLI user response.
  */
 _globalIPCRenderer.on("leetcode", (event, command, stdout, stderr) => {
   console.log(command);
   console.log(stdout);
   console.log(stderr);
+
+  if (command === "version") {
+    if (document.getElementById("leetCodeVersionControl").classList.contains("is-loading")) {
+      document.getElementById("leetCodeVersionControl").classList.remove("is-loading");
+    }
+    document.getElementById("leetCodeVersion").value = stdout;
+  }
 });

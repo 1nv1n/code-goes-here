@@ -53,7 +53,7 @@ function saveSettings() {
 
   toggleJDoodleButtons();
   toggleGitHubButtons();
-  toggleLeetCodeButtons();
+  _globalLeetCodeJS.toggleLeetCodeButtons();
   closeSettingsModal();
 }
 

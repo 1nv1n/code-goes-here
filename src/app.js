@@ -2,7 +2,7 @@ import {
   app, ipcMain, dialog, screen, BrowserWindow,
 } from "electron";
 import { enableLiveReload } from "electron-compile";
-import { exec } from "child_process";
+import { exec, spawn } from "child_process";
 
 enableLiveReload();
 
@@ -269,8 +269,27 @@ ipcMain.on("commit-github", (event, repoInfo, descTxt, solTxt, commitMessage) =>
   });
 });
 
+ipcMain.on("leetcode-version", (event) => {
+  leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("version"), (stdout, stderr) => {
+    mainWindow.webContents.send("leetcode-version", stdout, stderr);
+  });
+});
+
+ipcMain.on("leetcode-user", (event) => {
+  leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("user"), (stdOut0, stdErr0) => {
+    if (stdOut0.includes("[ERROR] You are not login yet?") && pref.leetCodeUsername.length > 0 && pref.leetCodePassword.length > 0) {
+      leetCodeJS.leetCodeSpawn(spawn, lCodeBaseCommand.concat("user -l"), pref, (stdOut1, stdErr1) => {
+        console.log(stdOut1);
+        console.log(stdErr1);
+      });
+    } else {
+      mainWindow.webContents.send("leetcode-user", stdOut0, stdErr0);
+    }
+  });
+});
+
 ipcMain.on("leetcode-command", (event, command) => {
-  leetCodeJS.lcExecute(exec, lCodeBaseCommand.concat(command), (stdout, stderr) => {
+  leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat(command), (stdout, stderr) => {
     mainWindow.webContents.send("leetcode", command, stdout, stderr);
   });
 });
