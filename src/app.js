@@ -2,7 +2,7 @@ import {
   app, ipcMain, dialog, screen, BrowserWindow,
 } from "electron";
 import { enableLiveReload } from "electron-compile";
-import { exec, spawn } from "child_process";
+import { exec, execFile, spawn } from "child_process";
 
 enableLiveReload();
 
@@ -51,7 +51,7 @@ const createWindow = () => {
   mainWindow.setMenu(null);
 
   // Open DevTools on launch.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
@@ -277,10 +277,10 @@ ipcMain.on("leetcode-version", (event) => {
 
 ipcMain.on("leetcode-user", (event) => {
   leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("user"), (stdOut0, stdErr0) => {
-    if (stdOut0.includes("[ERROR] You are not login yet?") && pref.leetCodeUsername.length > 0 && pref.leetCodePassword.length > 0) {
-      leetCodeJS.leetCodeSpawn(spawn, lCodeBaseCommand.concat("user -l"), pref, (stdOut1, stdErr1) => {
-        console.log(stdOut1);
-        console.log(stdErr1);
+    console.log(stdOut0);
+    if (stdOut0.includes("[ERROR] You are not login yet") && pref.leetCodeUsername.length > 0 && pref.leetCodePassword.length > 0) {
+      leetCodeJS.leetCodeLogin(exec, pref, (stdOut1) => {
+        mainWindow.webContents.send("leetcode-user-logged-in", stdOut1);
       });
     } else {
       mainWindow.webContents.send("leetcode-user", stdOut0, stdErr0);

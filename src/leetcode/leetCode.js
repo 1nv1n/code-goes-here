@@ -10,13 +10,30 @@ module.exports = {
       callback(stdout, stderr);
     });
   },
-  leetCodeSpawn: function leetCodeSpawn(spawn, command, pref, callback) {
-    const child = spawn(command);
-    // child.stdin.setEncoding("utf-8");
-    // process.stdin.pipe(child.stdin);
-    // child.stdout.pipe(process.stdout);
-    child.stdin.write(pref.leetCodeUsername + " \r\n" + pref.leetCodePassword + " \r\n");
-    child.stdin.end();
-    console.log(child.stdout);
+  leetCodeLogin: function leetCodeLogin(exec, pref, callback) {
+    const child = exec("leetcode user -l", (err, stdout, stderr) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(stdout);
+        console.log(stderr);
+        child.stdin.end();
+      }
+    });
+
+    child.stdout.on("data", (data) => {
+      console.log(data.toString());
+      if (data.includes("login:")) {
+        child.stdin.write(`${pref.leetCodeUsername}\r\n`);
+      } else if (data.includes("pass:")) {
+        child.stdin.write(`${pref.leetCodePassword}\r\n`);
+      } else if (data.includes("Successfully")) {
+        callback(data);
+      }
+    });
+
+    child.stdout.on("message", (data) => {
+      console.log(data.toString());
+    });
   },
 };
