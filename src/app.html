@@ -25,9 +25,14 @@
   <!-- Font Awesome! -->
   <script defer src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
 
-  <!-- Common/Renderer -->
-  <script defer src="./renderer/common.js"></script>
+  <!-- Renderer JS -->
   <script defer src="./renderer/renderer.js"></script>
+  <script defer src="./renderer/common.js"></script>
+  <script defer src="./renderer/downloadModal.js"></script>
+  <script defer src="./renderer/settingsModal.js"></script>
+  <script defer src="./renderer/jDoodleModal.js"></script>
+  <script defer src="./renderer/gitHubModal.js"></script>
+  <script defer src="./renderer/leetCodeModal.js"></script>
 
   <!-- Monaco Editor -->
   <script defer src="./monaco/monaco-description.js"></script>
@@ -35,6 +40,7 @@
 </head>
 
 <body>
+  <!-- Header for the App title & window buttons -->
   <header id="titlebar">
     <div id="drag-region" class="has-text-centered">
       <span class="icon is-small">
@@ -54,21 +60,23 @@
       </div>
     </div>
   </header>
+  <!-- Contains the entirety of the visible App -->
   <div class="app-wrapper">
     <div class="level level-button-bar">
       <div class="level-left">
         <div class="level-item buttons has-addons level-item-button">
-          <button id="settingBtn" title="Preferences & Settings" class="button is-small is-link" onClick="launchSettingModal()">
+          <button id="settingsButton" title="Preferences & Settings" class="button is-small is-link" onClick="launchSettingsModal()">
             <span class="icon is-small">
               <i class="fas fa-cogs"></i>
             </span>
           </button>
         </div>
 
+        <!-- Collection of buttons for operations on the description/README editor -->
         <div class="level-item buttons has-addons level-item-button">
-          <button id="toggleColumnDesc" title="Minimize Description Column" class="button is-small is-link" value="min" onClick="toggleColumnDesc()">
+          <button id="toggleMonColDescButton" title="Minimize Description Column" class="button is-small is-link" value="min" onClick="toggleMonColDesc()">
             <span class="icon is-small">
-              <i id="descColMinBtnIcon" class="fas fa-minus"></i>
+              <i id="descMonColBtnIcon" class="fas fa-minus"></i>
             </span>
           </button>
           <button title="Clear Description" class="button is-small is-link" onClick="clearDesc()">
@@ -78,37 +86,40 @@
           </button>
         </div>
 
+        <!-- Collection of buttons for operations on the code editor -->
         <div class="level-item buttons has-addons level-item-button">
-          <button id="toggleCodeDesc" title="Minimize Code Column" class="button is-small is-link" value="min" onClick="toggleColumnCode()">
+          <button id="toggleMonColCodeButton" title="Minimize Code Column" class="button is-small is-link" value="min" onClick="toggleMonColCode()">
             <span class="icon is-small">
-              <i id="codeColMinBtnIcon" class="fas fa-minus"></i>
+              <i id="codeMonColBtnIcon" class="fas fa-minus"></i>
             </span>
           </button>
-          <button title="Clear Solution" class="button is-small is-link" onClick="clearSol()">
+          <button title="Clear Code" class="button is-small is-link" onClick="clearCode()">
             <span class="icon is-small">
               <i class="far fa-trash-alt"></i>
             </span>
           </button>
         </div>
 
+        <!-- Collection of buttons for jDoodle related operations -->
         <div class="level-item buttons has-addons level-item-button">
-          <button id="jDoodleLangBtn" title="Select Language" class="button is-small is-link" onClick="openLanguageModal()" disabled>
+          <button id="jDoodleLangButton" title="Select Language" class="button is-small is-link" onClick="openLanguageModal()" disabled>
             <span class="icon is-small">
               <i class="fas fa-language"></i>
             </span>
           </button>
-          <button id="jDoodleUsageBtn" title="Check Compiler Usage" id="checkUsageButton" class="button is-small is-link" onClick="checkUsage()" disabled>
+          <button id="jDoodleUsageButton" title="Check Compiler Usage" class="button is-small is-link" onClick="checkJDoodleUsage()" disabled>
             <span class="icon is-small">
               <i class="fas fa-dollar-sign"></i>
             </span>
           </button>
-          <button id="jDoodleExecuteBtn" title="Execute Code" id="executeCodeButton" class="button is-small is-link" onClick="sendCodeForExecution()" disabled>
+          <button id="jDoodleExecuteButton" title="Execute Code" class="button is-small is-link" onClick="sendCodeForExecution()" disabled>
             <span class="icon is-small">
               <i class="fas fa-play"></i>
             </span>
           </button>
         </div>
 
+        <!-- Collection of buttons for local App operations -->
         <div class="level-item buttons has-addons level-item-button">
           <button id="setLocalDefBtn" title="Set Local Default" class="button is-small is-link" onClick="setLocalDefault()">
             <span class="icon is-small">
@@ -127,24 +138,26 @@
           </button>
         </div>
 
+        <!-- Collection of buttons for GitHub related operations -->
         <div class="level-item buttons has-addons level-item-button">
           <button title="Set Remote Default" class="button is-small is-link" onClick="setRemoteDefault()">
             <span class="icon is-small">
               <i class="fas fa-code"></i>
             </span>
           </button>
-          <button id="gHDownloadBtn" title="Download from GitHub" class="button is-small is-link" onClick="launchGitHubRepoModal()" disabled>
+          <button id="gHdownloadContentButton" title="Download from GitHub" class="button is-small is-link" onClick="launchGitHubRepoModal()" disabled>
             <span class="icon is-small">
               <i class="fab fa-github"></i>
             </span>
           </button>
-          <button id="gHCommitBtn" title="Commit to GitHub" class="button is-small is-link" onClick="launchGitHubRepoModalForCommit()" disabled>
+          <button id="gHCommitButton" title="Commit to GitHub" class="button is-small is-link" onClick="launchGitHubRepoModalForCommit()" disabled>
             <span class="icon is-small">
               <i class="fas fa-code-branch"></i>
             </span>
           </button>
         </div>
 
+        <!-- Collection of buttons for LeetCode related operations -->
         <div class="level-item buttons has-addons level-item-button">
           <button id="lCodeCLIVersion" title="leetcode-cli Version" class="button is-small is-link" onClick="getLeetCodeCLIVersion()">
             <span class="icon is-small">
@@ -174,25 +187,27 @@
         </div>
       </div>
     </div>
+
+    <!-- Contains the Monaco editors -->
     <div class="columns columns-wrapper">
       <div id="descColumn" class="column is-4 column-wrapper">
         <div id="monDescEditor" class="monaco-editor"></div>
       </div>
-      <div id="solColumn" class="column is-8 column-wrapper">
+      <div id="codeColumn" class="column is-8 column-wrapper">
         <div id="monCodeEditor" class="monaco-editor"></div>
       </div>
     </div>
   </div>
 
   <!-- Settings Modal -->
-  <div id="settingModal" class="modal">
+  <div id="settingsModal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Preferences & Settings</p>
-        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeSettingModal()"></button>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeSettingsModal()"></button>
       </header>
-      <section id="settingModalContent" class="modal-card-body">
+      <section id="settingsModalContent" class="modal-card-body">
         <div class="tabs is-centered is-boxed" id="tabs">
           <ul>
             <li id="credTab" class="is-active" data-tab="1">
@@ -263,7 +278,7 @@
       <footer class="modal-card-foot">
         <button title="Save" id="saveSettingsButton" class="button is-link" onClick="saveSettings()">Save</button>
         <button title="Reset" id="resetSettingsModalButton" class="button is-link" onClick="resetSettings()">Reset</button>
-        <button title="Close" id="closeDownloadModalButton" class="button is-link" onClick="closeSettingModal()">Close</button>
+        <button title="Close" id="closeDownloadModalButton" class="button is-link" onClick="closeSettingsModal()">Close</button>
       </footer>
     </div>
   </div>
@@ -318,15 +333,15 @@
           </div>
         </article>
         <div class="field">
-          <div class="control"><input id="probDescInput" class="input is-info" type="text" placeholder="Readme" /></div>
+          <div class="control"><input id="descDownloadInput" class="input is-info" type="text" placeholder="Readme" /></div>
         </div>
         <div class="field">
-          <div class="control"><input id="solutionInput" class="input is-info" type="text" placeholder="Solution" />
+          <div class="control"><input id="codeDownloadInput" class="input is-info" type="text" placeholder="Solution" />
           </div>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button title="Download Content" id="downloadButton" class="button is-link" onClick="download()">Download</button>
+        <button title="Download Content" id="downloadContentButton" class="button is-link" onClick="downloadContent()">Download</button>
         <button title="Close Modal" id="closeDownloadModalButton" class="button is-link" onClick="closeDownloadModal()">Close</button>
       </footer>
     </div>
@@ -361,33 +376,27 @@
       <section id="gitHubCommitModalBody" class="modal-card-body">
         <article class="message">
           <div class="message-header">
-            <p>Usage</p>
+            <p>Usage Tips</p>
           </div>
           <div class="message-body">
-            Input the full path the raw file containing the content to be downloaded for both, the problem description
-            as well as the solution. eg:
-            https://raw.githubusercontent.com/..Solution.java
+            To commit to a new directory, just add the name of the directory & a forward slash before the file name. And remember to give an extension to the solution!
           </div>
         </article>
         <div class="field">
           <label class="label">Description Path</label>
-          <input id="descPathInput" class="input" type="text" placeholder="Path" />
+          <input id="commitDescFilePathInput" class="input" type="text" placeholder="Path" />
         </div>
         <div class="field">
           <label class="label">Solution Path</label>
-          <input id="solPathInput" class="input" type="text" placeholder="Path" />
+          <input id="commitCodeFilePathInput" class="input" type="text" placeholder="Path" />
         </div>
         <div class="field">
           <label class="label">Commit Message</label> <input id="commitMessageInput" class="input" type="text" placeholder="Commit Message" />
         </div>
         <div class="field">
-          <label class="label is-small">Commit SHAs</label> <input id="commitSHA1" class="input is-small" type="text" disabled />
-          <input id="commitSHA2" class="input is-small" type="text" disabled />
-        </div>
-        <div class="field">
           <label class="label is-small">Commit SHAs</label>
-          <input id="commitSHA1" class="input is-small" type="text" disabled>
-          <input id="commitSHA2" class="input is-small" type="text" disabled>
+          <input id="commitSHA1" class="input is-small" type="text" disabled />
+          <input id="commitSHA2" class="input is-small" type="text" disabled />
         </div>
       </section>
       <footer class="modal-card-foot">

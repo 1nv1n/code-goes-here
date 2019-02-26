@@ -2,7 +2,7 @@ import {
   app, ipcMain, dialog, screen, BrowserWindow,
 } from "electron";
 import { enableLiveReload } from "electron-compile";
-import { Preference } from "./preferences/preference";
+import { exec } from "child_process";
 
 enableLiveReload();
 
@@ -11,14 +11,14 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
   app.quit();
 }
 
-const exec = require("child_process").exec;
-const GitHubInstance = require("github-api");
 const fileSystem = require("fs");
 const settings = require("electron-settings");
+const prefManagerJS = require("./preferences/preferenceManager");
 const jDoodleJS = require("./jdoodle/jDoodle");
 const gitHubJS = require("./github/gitHub");
+const leetCodeJS = require("./leetcode/leetCode");
 
-const leetcode = "leetcode ";
+const lCodeBaseCommand = "leetcode ";
 
 let repository;
 let pref;
@@ -28,31 +28,6 @@ let gHUser;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-
-const readPref = () => {
-  pref = new Preference();
-
-  if (settings.has("jDoodleClientID")) {
-    pref.jDoodleClientID = settings.get("jDoodleClientID");
-  }
-
-  if (settings.has("jDoodleClientSecret")) {
-    pref.jDoodleClientSecret = settings.get("jDoodleClientSecret");
-  }
-
-  if (settings.has("gitHubToken")) {
-    pref.gitHubToken = settings.get("gitHubToken");
-    gitHub = new GitHubInstance({
-      token: pref.gitHubToken,
-    });
-    gHUser = gitHub.getUser();
-  }
-
-  if (settings.has("leetCodeUsername") && settings.has("leetCodePassword")) {
-    pref.leetCodeUsername = settings.get("leetCodeUsername");
-    pref.leetCodePassword = settings.get("leetCodePassword");
-  }
-};
 
 const mainWindowReady = () => {
   mainWindow.webContents.send("main-window-ready", pref);
@@ -93,10 +68,13 @@ const createWindow = () => {
   mainWindow.webContents.on("did-finish-load", mainWindowReady);
 };
 
-const initiateWindowLoad = () => {
-  readPref();
+async function initiateWindowLoad() {
+  pref = await prefManagerJS.readCurrentPref(settings);
+  gitHub = await gitHubJS.createInstance(pref);
+  gHUser = gitHub.getUser();
+
   createWindow();
-};
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -122,11 +100,7 @@ app.on("activate", () => {
 
 ipcMain.on("save-pref", (event, updatedPref) => {
   pref = updatedPref;
-  settings.set("jDoodleClientID", pref.jDoodleClientID);
-  settings.set("jDoodleClientSecret", pref.jDoodleClientSecret);
-  settings.set("gitHubToken", pref.gitHubToken);
-  settings.set("leetCodeUsername", pref.leetCodeUsername);
-  settings.set("leetCodePassword", pref.leetCodePassword);
+  prefManagerJS.updatePref(settings, pref);
 });
 
 ipcMain.on("execute-code", (event, editorText, language, versionIdx) => {
@@ -215,7 +189,7 @@ ipcMain.on("save-local", (event, descTxt, solTxt) => {
     }
   });
 
-  options.title = "Save Problem Solution";
+  options.title = "Save Solution Code";
   options.defaultPath = app.getPath("documents").concat("/Solution");
   dialog.showSaveDialog(null, options, (path) => {
     try {
@@ -296,24 +270,10 @@ ipcMain.on("commit-github", (event, repoInfo, descTxt, solTxt, commitMessage) =>
 });
 
 ipcMain.on("leetcode-command", (event, command) => {
-  execute(leetcode.concat(command), (stdout, stderr) => {
+  leetCodeJS.lcExecute(exec, lCodeBaseCommand.concat(command), (stdout, stderr) => {
     mainWindow.webContents.send("leetcode", command, stdout, stderr);
   });
 });
-
-/**
- * Execute a command.
- * @param {*} command
- * @param {*} callback
- */
-function execute(command, callback) {
-  exec(command, (err, stdout, stderr) => {
-    if (err) {
-      console.log("Command: $command. Error: $err");
-    }
-    callback(stdout, stderr);
-  });
-}
 
 /**
  * A comparator to sort files & directories by name.

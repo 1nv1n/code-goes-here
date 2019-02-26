@@ -12,7 +12,7 @@ let currLang = ["java", "Java (JDK 1.8.0_66)", "0", "java"];
  * Send the code to the renderer to be sent to the main process for execution.
  */
 function sendCodeForExecution() {
-  document.getElementById("jDoodleExecuteBtn").classList.add("is-loading");
+  document.getElementById("jDoodleExecuteButton").classList.add("is-loading");
   sendCodeToMainProcess(codeEditor.getValue(), currLang[0], currLang[2]);
 }
 
@@ -48,7 +48,7 @@ function updateLanguage(language) {
  * @param {*} language
  */
 function createLanguageButton(language) {
-  const span = createSpanButton(language[1])
+  const span = createSpanButton(language[1]);
   span.onclick = () => { updateLanguage(language); };
   return span;
 }
@@ -76,6 +76,56 @@ function openLanguageModal() {
 
   document.getElementById("languageModal").classList.add("is-active");
   document.documentElement.classList.add("is-clipped");
+}
+
+/**
+ * Clear the content of the solution editor.
+ */
+function clearCode() {
+  codeEditor.setValue("");
+}
+
+/**
+ * Clear the content of the solution editor to the value from the template.
+ */
+function resetCode() {
+  document.getElementById("resetSolButton").classList.add("is-loading");
+  _globalIPCRenderer.send("reset-code", 1);
+}
+
+/**
+ * Collapse the code editor column.
+ */
+function toggleMonColCode() {
+  if (document.getElementById("toggleMonColCodeButton").value === "min") {
+    document.getElementById("codeColumn").classList.remove("is-8");
+    document.getElementById("codeColumn").classList.add("is-hidden-touch");
+    document.getElementById("codeColumn").classList.add("is-hidden-tablet");
+    document.getElementById("codeColumn").classList.add("is-hidden-desktop");
+
+    document.getElementById("descColumn").classList.remove("is-4");
+    document.getElementById("descColumn").classList.add("is-12");
+
+    document.getElementById("codeMonColBtnIcon").classList.remove("fa-minus");
+    document.getElementById("codeMonColBtnIcon").classList.add("fa-plus");
+
+    document.getElementById("toggleMonColCodeButton").value = "max";
+    document.getElementById("toggleMonColCodeButton").title = "Maximize Code Column";
+  } else {
+    document.getElementById("codeColumn").classList.remove("is-hidden-touch");
+    document.getElementById("codeColumn").classList.remove("is-hidden-tablet");
+    document.getElementById("codeColumn").classList.remove("is-hidden-desktop");
+    document.getElementById("codeColumn").classList.add("is-8");
+
+    document.getElementById("descColumn").classList.remove("is-12");
+    document.getElementById("descColumn").classList.add("is-4");
+
+    document.getElementById("codeMonColBtnIcon").classList.add("fa-minus");
+    document.getElementById("codeMonColBtnIcon").classList.remove("fa-plus");
+
+    document.getElementById("toggleMonColCodeButton").value = "min";
+    document.getElementById("toggleMonColCodeButton").title = "Minimize Code Column";
+  }
 }
 
 /**

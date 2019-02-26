@@ -1,7 +1,22 @@
+const GitHubInstance = require("github-api");
+
 const reqPromise = require("request-promise");
 const constants = require("./../constants/constants");
 
 module.exports = {
+  createInstance: function createInstance(pref) {
+    return new Promise((resolve, reject) => {
+      let gitHub;
+      if (pref.gitHubToken.length > 0) {
+        gitHub = new GitHubInstance({
+          token: pref.gitHubToken,
+        });
+        resolve(gitHub);
+      } else {
+        reject(gitHub);
+      }
+    });
+  },
   retrieveContent: function retrieveContent(url) {
     if (url === null || url.length <= 0) {
       return "";
