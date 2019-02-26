@@ -1,7 +1,11 @@
 {
   "extends": "eslint-config-airbnb",
   "globals": {
-    "document": false
+    "document": false,
+    "_globalIPCRenderer": "readable",
+    "_globalRepoInfo": "readable",
+    "_globalPref": "readable",
+    "_globalIsInDownLoadMode": "writeable"
   },
   "rules": {
     "import/extensions": 0,
@@ -21,7 +25,8 @@
     "no-plusplus": [1, {
       "allowForLoopAfterthoughts": true
     }],
-    "no-unused-vars": ["error", { "vars": "local", "args": "after-used", "ignoreRestSiblings": false, "argsIgnorePattern": "^event" }],
+    "no-underscore-dangle": ["error", { "allow": ["_globalIPCRenderer", "_globalRepoInfo", "_globalPref", "_globalIsInDownLoadMode"] }],
+    "no-unused-vars": ["error", { "vars": "all", "varsIgnorePattern": "_global", "args": "after-used", "ignoreRestSiblings": false, "argsIgnorePattern": "^event" }],
     "no-use-before-define": ["error", { "functions": false, "classes": true }],
     "object-shorthand": 0,
     "quotes": ["error", "double"]
