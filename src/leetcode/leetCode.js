@@ -11,18 +11,15 @@ module.exports = {
     });
   },
   leetCodeLogin: function leetCodeLogin(exec, pref, callback) {
-    const child = exec("leetcode user -l", (err, stdout, stderr) => {
+    const child = exec("leetcode user -l", (err) => {
       if (err) {
         console.log(err);
       } else {
-        console.log(stdout);
-        console.log(stderr);
         child.stdin.end();
       }
     });
 
     child.stdout.on("data", (data) => {
-      console.log(data.toString());
       if (data.includes("login:")) {
         child.stdin.write(`${pref.leetCodeUsername}\r\n`);
       } else if (data.includes("pass:")) {

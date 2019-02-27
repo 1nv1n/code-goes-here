@@ -2,7 +2,7 @@ import {
   app, ipcMain, dialog, screen, BrowserWindow,
 } from "electron";
 import { enableLiveReload } from "electron-compile";
-import { exec, execFile, spawn } from "child_process";
+import { exec } from "child_process";
 
 enableLiveReload();
 
@@ -17,6 +17,7 @@ const prefManagerJS = require("./preferences/preferenceManager");
 const jDoodleJS = require("./jdoodle/jDoodle");
 const gitHubJS = require("./github/gitHub");
 const leetCodeJS = require("./leetcode/leetCode");
+const cliConstants = require("./leetcode/cliConstants");
 
 const lCodeBaseCommand = "leetcode ";
 
@@ -51,7 +52,7 @@ const createWindow = () => {
   mainWindow.setMenu(null);
 
   // Open DevTools on launch.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
@@ -276,15 +277,40 @@ ipcMain.on("leetcode-version", (event) => {
 });
 
 ipcMain.on("leetcode-user", (event) => {
-  leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("user"), (stdOut0, stdErr0) => {
-    console.log(stdOut0);
-    if (stdOut0.includes("[ERROR] You are not login yet") && pref.leetCodeUsername.length > 0 && pref.leetCodePassword.length > 0) {
-      leetCodeJS.leetCodeLogin(exec, pref, (stdOut1) => {
-        mainWindow.webContents.send("leetcode-user-logged-in", stdOut1);
+  leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("user"), (stdout) => {
+    if (stdout.includes(cliConstants.NOT_LOGGED_IN_ERROR)) {
+      if (pref.leetCodeUsername.length > 0 && pref.leetCodePassword.length > 0) {
+        leetCodeJS.leetCodeLogin(exec, pref, (stdOut1) => {
+          mainWindow.webContents.send("leetcode-user-logged-in", stdOut1);
+
+          leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("stat"), (stdStat) => {
+            mainWindow.webContents.send("leetcode-stat", stdStat);
+          });
+
+          leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("list"), (stdList) => {
+            mainWindow.webContents.send("leetcode-list", stdList);
+          });
+        });
+      } else {
+        mainWindow.webContents.send("leetcode-user", cliConstants.NOT_LOGGED_IN_NO_CRED);
+      }
+    } else if (stdout.includes(cliConstants.LOGGED_IN_USER)) {
+      mainWindow.webContents.send("leetcode-user", stdout);
+
+      leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("stat"), (stdStat) => {
+        mainWindow.webContents.send("leetcode-stat", stdStat);
       });
-    } else {
-      mainWindow.webContents.send("leetcode-user", stdOut0, stdErr0);
+
+      leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("list"), (stdList) => {
+        mainWindow.webContents.send("leetcode-list", stdList);
+      });
     }
+  });
+});
+
+ipcMain.on("leetcode-logout", (event) => {
+  leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("user -L"), (stdout, stderr) => {
+    mainWindow.webContents.send("leetcode-logout", stdout, stderr);
   });
 });
 

@@ -118,6 +118,14 @@ function closeLeetCodeModal() {
 }
 
 /**
+ * Log out of LeetCode.
+ */
+function leetCodeLogOut() {
+  document.getElementById("logoutLeetCodeButton").classList.add("is-loading");
+  _globalIPCRenderer.send("leetcode-logout");
+}
+
+/**
  * Handle the "compiled" event.
  */
 _globalIPCRenderer.on("compiled", (event, code) => {
@@ -223,20 +231,75 @@ _globalIPCRenderer.on("committed", (event, descCommit, solCommit) => {
 /**
  * Handle the LeetCode CLI version response.
  */
-_globalIPCRenderer.on("leetcode-version", (event, stdout, stderr) => {
+_globalIPCRenderer.on("leetcode-version", (event, stdout) => {
   if (document.getElementById("leetCodeVersionControl").classList.contains("is-loading")) {
     document.getElementById("leetCodeVersionControl").classList.remove("is-loading");
   }
-  document.getElementById("leetCodeVersion").value = stdout;
+  document.getElementById("leetCodeVersion").value = `Version ${stdout}`;
 });
 
 /**
  * Handle the LeetCode CLI user response.
  */
-_globalIPCRenderer.on("leetcode-version", (event, stdout, stderr) => {
-  console.log(stdout);
-  console.log(stderr);
+_globalIPCRenderer.on("leetcode-user-logged-in", (event, stdout) => {
+  if (document.getElementById("leetCodeLogStatusControl").classList.contains("is-loading")) {
+    document.getElementById("leetCodeLogStatusControl").classList.remove("is-loading");
+  }
+  document.getElementById("leetCodeLogStatus").value = stdout;
+  document.getElementById("logoutLeetCodeButton").disabled = false;
 });
+
+/**
+ * Handle the LeetCode CLI user response.
+ */
+_globalIPCRenderer.on("leetcode-user", (event, stdout) => {
+  console.log(stdout);
+  if (document.getElementById("leetCodeLogStatusControl").classList.contains("is-loading")) {
+    document.getElementById("leetCodeLogStatusControl").classList.remove("is-loading");
+  }
+  document.getElementById("leetCodeLogStatus").value = stdout.trim();
+});
+
+/**
+ * Handle the LeetCode CLI version response.
+ */
+_globalIPCRenderer.on("leetcode-logout", (event, stdout) => {
+  if (document.getElementById("logoutLeetCodeButton").classList.contains("is-loading")) {
+    document.getElementById("logoutLeetCodeButton").classList.remove("is-loading");
+  }
+  document.getElementById("logoutLeetCodeButton").disabled = true;
+  document.getElementById("leetCodeLogStatus").value = stdout.trim();
+});
+
+/**
+ * Handle the LeetCode CLI user response.
+ */
+_globalIPCRenderer.on("leetcode-stat", (event, stdout) => {
+  if (document.getElementById("leetCodeStatsControl").classList.contains("is-loading")) {
+    document.getElementById("leetCodeStatsControl").classList.remove("is-loading");
+  }
+  const stat = stdout.trim();
+  document.getElementById("leetCodeStats").value = ` ${stat}`;
+});
+
+/**
+ * Handle the LeetCode CLI user response.
+ */
+_globalIPCRenderer.on("leetcode-list", (event, stdout) => {
+  if (document.getElementById("leetCodeListControl").classList.contains("is-loading")) {
+    document.getElementById("leetCodeListControl").classList.remove("is-loading");
+  }
+  const formattedList = "";
+  const lcList = stdout.split("\n");
+  lcList.forEach((problem) => {
+    console.log(problem);
+    formattedList.concat(problem.trim());
+    formattedList.concat("\n");
+  });
+  console.log(formattedList);
+  document.getElementById("leetCodeList").value = stdout;
+});
+
 
 /**
  * Handle the LeetCode CLI user response.
