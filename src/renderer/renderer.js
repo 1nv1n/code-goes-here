@@ -54,7 +54,7 @@ function setLocalDefault() {
  * TODO: Make this configurable.
  */
 function setRemoteDefault() {
-  _globalIPCRenderer.send("download", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/README.md", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/Solution.java");
+  _globalIPCRenderer.send("download", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/Template.md", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/Template.java");
 }
 
 /**

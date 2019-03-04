@@ -155,13 +155,13 @@ ipcMain.on("download", (event, descLink, solutionLink) => {
 });
 
 ipcMain.on("set-desc-local", (event) => {
-  fileSystem.readFile(`${__dirname}/template/README.md`, "utf8", (err, data) => {
+  fileSystem.readFile(`${__dirname}/template/Template.md`, "utf8", (err, data) => {
     mainWindow.webContents.send("desc-template", data);
   });
 });
 
 ipcMain.on("set-sol-local", (event, solLangFlag) => {
-  const path = (solLangFlag === 1) ? `${__dirname}/template/Solution.java` : `${__dirname}/template/Solution`;
+  const path = (solLangFlag === 1) ? `${__dirname}/template/Solution.java` : `${__dirname}/template/Template`;
   fileSystem.readFile(path, "utf8", (err, data) => {
     mainWindow.webContents.send("sol-template", data);
   });
