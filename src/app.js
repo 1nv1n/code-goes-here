@@ -248,6 +248,7 @@ ipcMain.on("get-sol", (event, solLink) => {
 
 ipcMain.on("commit-github", (event, repoInfo, descTxt, solTxt, commitMessage) => {
   const user = gitHub.getUser();
+  const cGHCommitMessage = `CGH - ${commitMessage}`;
   Promise.all([gitHubJS.retrieveUser(user), gitHubJS.retrieveEmailList(user)]).then((values) => {
     const options = {
       author: {
@@ -262,8 +263,8 @@ ipcMain.on("commit-github", (event, repoInfo, descTxt, solTxt, commitMessage) =>
     };
 
     repository = gitHub.getRepo(repoInfo.repoUser, repoInfo.repoName);
-    Promise.all([gitHubJS.writeFile(repository, repoInfo.branchRef, repoInfo.descPath, descTxt, commitMessage, options)]).then((descCommit) => {
-      Promise.all([gitHubJS.writeFile(repository, repoInfo.branchRef, repoInfo.solPath, solTxt, commitMessage, options)]).then((solCommit) => {
+    Promise.all([gitHubJS.writeFile(repository, repoInfo.branchRef, repoInfo.descPath, descTxt, cGHCommitMessage, options)]).then((descCommit) => {
+      Promise.all([gitHubJS.writeFile(repository, repoInfo.branchRef, repoInfo.solPath, solTxt, cGHCommitMessage, options)]).then((solCommit) => {
         mainWindow.webContents.send("committed", descCommit, solCommit);
       });
     });
