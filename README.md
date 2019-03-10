@@ -1,73 +1,49 @@
 # code-goes-here
 
-Cross Platform Desktop App to define problems & code solutions (using the Monaco Editor) - compile the solutions using JDoodle & finally, commit to GitHub.
+An App to practice programming.
 
 ## Built With
 
- * Electron (https://electronjs.org/)
- * Bulma (https://bulma.io)
- * Monaco Editor (https://github.com/Microsoft/monaco-editor)
+ * [Electron](https://electronjs.org/),
+   A framework for creating native applications using web technologies to build cross-platform desktop applications.
+ * [Bulma](https://bulma.io),
+   A light-weight, modular CSS framework.
+ * [Monaco Editor](https://github.com/Microsoft/monaco-editor), A browser based code editor that powers [VSCode](https://github.com/Microsoft/vscode).
 
 ## Usage
+
  * Install nodejs (https://nodejs.org/en/download/)
- * Install Electron Forge (npm install -g electron-forge)
+ * Install Electron Forge (`npm install -g electron-forge`)
  * git clone https://github.com/1nv1n/code-goes-here.git
- * Create file "credentials.js" in directory: "code-goes-here\src\jdoodle" with the following content (replace the placeholders with your versions after registering at: https://www.jdoodle.com/faq):
- ```javascript
-function define(name, value) {
-  Object.defineProperty(exports, name, {
-    value: value,
-    enumerable: true,
-  });
-}
-
-// JDoodle Credentials
-define("CLIENT_ID", "YOUR_CLIENT_ID_HERE");
-define("CLIENT_SECRET", "YOUR_CLIENT_SECRET_HERE");
-```
- * Create file "credentials.js" in directory: "code-goes-here\src\github" with the following content (replace the placeholder with your token after registering under GitHub's Developer Settings):
- ```javascript
-function define(name, value) {
-  Object.defineProperty(exports, name, {
-    value: value,
-    enumerable: true,
-  });
-}
-
-// GitHub Personal Access Token
-define("TOKEN", "YOUR_TOKEN_HERE");
-```
- * From the root directory (code-goes-here); run:
+ * Switch to the cloned directory & run:
    * `npm install`
    * `npm start`
+ * *(Optional)* Register for an account at [JDoodle](https://www.jdoodle.com/compiler-api) & get your Client ID & Secret. Set these through App's "Settings"
+ * *(Optional)* Create a personal access token at [GitHub](https://github.com/settings/tokens). Set this through the App's settings.
 
-## Goals & Features
+## Project Goals
 
- * Monaco editor for problem description.
-   * Should describe the problem to solve.
-   * Could include examples, sample input(s)/output(s), notes, etc.
-   * Could use markdown syntax (Could use https://github.com/markdown-it/markdown-it for preview generation).
- * Monaco editor for problem solution.
-   * Use all the features (including language support) from the editor that powers Visual Studio Code.
- * GitHub integration (needs Personal Access Token Generation)
-   * Problem & solution should be uploadable onto a provided GitHub repository.
-   * Problem & solution set should be downloadable from the provided GitHub repository.
- * Code execution (needs JDoodle Client ID & Secret)
-   * Should provide the user the expected output as well as compute metrics (CPU, memory usage).
+ * A dual editor system to practice programming.
+   * An editor to describe the practice problem & another to code the solution.
+ * Compile code using an online compiler to generate the output & provide statistics.
+ * Download & commit back to GitHub.
 
-## Task List Status
+## Features
+
  - [ ] "File Browser" like functionality to see & categorize (folders) solutions & offer advanced local Git as well as GitHub integration.
  - [ ] Provision a "snippets" system that allows for user-defined snippets & code (commonly used methods) to be pulled in at will to avoid write-duplication.
- - [ ] Create a tags system to allow for problems & solutions to be tagged (user-defined (eg: easy, hard, leet, tree, graph, array, etc.))
+ - [ ] Create a tags system to allow for problems & solutions to be tagged (user-defined (eg: easy, hard, leet, tree, graph, array, etc.)).
+ - [ ] Add in customizable "timer".
  - [ ] Advanced/multiple third-party compiler integration.
+ - [x] LeetCode integration.
  - [x] Basic compiler provision (JDoodle).
  - [x] Basic GitHub integration (Commit to provided repository).
  - [x] Basic HTTP "download" of description & solution (eg: Raw content from GitHub).
- - [x] Set basic code editor.
- - [x] Set basic description editor.
+ - [x] Set basic code editor (Monaco).
+ - [x] Set basic description editor (Monaco).
  - [x] Pull in the Monaco Editor.
  - [x] Pull in the Bulma CSS framework.
  - [x] Initialize Electron application using Electron Forge.
 
 ## Work-In-Progress Screenshot
-![code-supposed-to-go-here](https://i.imgur.com/983JIYq.png)
+![code-goes-here](https://i.imgur.com/UboGZeV.png)
