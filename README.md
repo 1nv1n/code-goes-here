@@ -5,7 +5,7 @@ An App to practice programming.
 ## Built With
 
  * [Electron](https://electronjs.org/),
-   A framework for creating native applications using web technologies to build cross-platform desktop applications.
+   A framework for creating native cross-platform desktop applications using web technologies.
  * [Bulma](https://bulma.io),
    A light-weight, modular CSS framework.
  * [Monaco Editor](https://github.com/Microsoft/monaco-editor), A browser based code editor that powers [VSCode](https://github.com/Microsoft/vscode).
