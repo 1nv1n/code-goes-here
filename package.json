@@ -70,7 +70,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "github-api": "^3.0.0",
     "leetcode-cli": "^2.6.1",
-    "monaco-editor": "^0.15.6",
+    "monaco-editor": "^0.16.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
@@ -80,7 +80,7 @@
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^5.2.4",
     "electron-prebuilt-compile": "4.0.0",
-    "eslint": "^5.14.1",
+    "eslint": "^5.15.1",
     "eslint-config-airbnb": "^17",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jsx-a11y": "^6",
