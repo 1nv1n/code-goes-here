@@ -2,12 +2,12 @@
   "extends": "eslint-config-airbnb",
   "globals": {
     "document": false,
-    "_globalIPCRenderer": "readable",
-    "_globalRepoInfo": "readable",
-    "_globalPref": "readable",
-    "_globalCommonJS": "readable",
-    "_globalLeetCodeJS": "readable",
-    "_globalIsInDownLoadMode": "writeable"
+    "_globalIPCRenderer": "readonly",
+    "_globalRepoInfo": "readonly",
+    "_globalPref": "readonly",
+    "_globalCommonJS": "readonly",
+    "_globalLeetCodeJS": "readonly",
+    "_globalIsInDownLoadMode": "writable"
   },
   "rules": {
     "import/extensions": 0,
