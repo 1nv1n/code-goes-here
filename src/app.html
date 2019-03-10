@@ -162,7 +162,7 @@
               <i class="fas fa-info-circle"></i>
             </span>
           </button>
-          <button id="lCodeListButton" title="List LeetCode Problems" class="button is-small is-link" onClick="listLeetCodeProblems()" disabled>
+          <button id="lCodeListButton" title="List LeetCode Problems" class="button is-small is-link" onClick="launchLeetCodeListModal()" disabled>
             <span class="icon is-small">
               <i class="fas fa-list-ul"></i>
             </span>
@@ -464,22 +464,33 @@
             </div>
           </div>
         </div> -->
+      </section>
+      <footer class="modal-card-foot">
+        <button title="Logout of LeetCode" id="logoutLeetCodeButton" class="button is-link" onClick="leetCodeLogOut()">Logout</button>
+        <button title="Close Modal" id="closeLeetCodeButton" class="button is-link" onClick="closeLeetCodeModal()">Close</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- LeetCode Problem List Modal -->
+  <div id="leetCodeListModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">LeetCode Problem List</p>
+        <button title="Close Modal" class="delete is-danger" aria-label="close" onClick="closeLeetCodeListModal()"></button>
+      </header>
+      <section id="leetCodeListModalBody" class="modal-card-body">
         <div class="field is-horizontal">
-          <div class="field-label is-small">
-            <label class="label">Question List</label>
-          </div>
           <div class="field-body">
             <div class="field">
-              <div id="leetCodeListControl" class="control is-loading">
-                <textarea id="leetCodeList" class="textarea is-small" placeholder="LeetCode List" rows="10" disabled></textarea>
-              </div>
+              <div id="leetCodeListControl" class="control is-loading" style="overflow-y: scroll; height:600px;"></div>
             </div>
           </div>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button title="Logout of LeetCode" id="logoutLeetCodeButton" class="button is-link" onClick="leetCodeLogOut()">Logout</button>
-        <button title="Close Modal" id="closeLeetCodeButton" class="button is-link" onClick="closeLeetCodeModal()">Back</button>
+        <button title="Close Modal" id="closeLeetCodeListButton" class="button is-link" onClick="closeLeetCodeListModal()">Close</button>
       </footer>
     </div>
   </div>

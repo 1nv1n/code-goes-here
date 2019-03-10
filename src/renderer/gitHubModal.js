@@ -180,7 +180,7 @@ function populateReposList(repoList) {
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
   const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("repoListDiv");
-  Object.keys(repoList).forEach(key => {
+  Object.keys(repoList).forEach((key) => {
     const repoButton = _globalCommonJS.createSpanButton(repoList[key].name);
     repoButton.onclick = () => {
       document.getElementById("gitHubRepoBackButton").innerHTML = "Back";
@@ -199,7 +199,7 @@ function populateBranchList(branchList) {
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
   const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("branchListDiv");
-  Object.keys(branchList).forEach(key => {
+  Object.keys(branchList).forEach((key) => {
     const branchButton = _globalCommonJS.createSpanButton(branchList[key].name);
     branchButton.onclick = () => {
       getBranchContent(branchList[key].name);
@@ -218,8 +218,8 @@ function populateContentList(contentList) {
   loadingButton.style.display = "none";
   const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("contentListDiv");
   const table = _globalCommonJS.createTable("contentListTable", "contentListTableBody");
-  Object.keys(contentList).forEach(key => {
-    const tableRow = _globalCommonJS.createContentRow(contentList[key]);
+  Object.keys(contentList).forEach((key) => {
+    const tableRow = _globalCommonJS.createGHContentRow(contentList[key]);
     table.appendChild(tableRow);
   });
   wrappingTagsDiv.appendChild(table);

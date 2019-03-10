@@ -45,7 +45,7 @@ module.exports = {
    * Creates a row for the content of the branch/directory on the table.
    * @param {*} contentElement
    */
-  createContentRow: function createContentRow(contentElement) {
+  createGHContentRow: function createGHContentRow(contentElement) {
     const tableRow = document.createElement("tr");
     const iconCell = document.createElement("td");
     const downloadCell = document.createElement("td");
@@ -70,7 +70,7 @@ module.exports = {
     downloadCodeButton.classList.add("is-link");
 
     if (contentElement.type === "dir") {
-      elementButton.innerHTML = "<span class='icon is-small'><i class='far fa-folder'></i></span> &emsp;" + contentElement.name;
+      elementButton.innerHTML = `<span class='icon is-small'><i class='far fa-folder'></i></span> &emsp; ${contentElement.name}`;
       elementButton.onclick = () => { getDirContent(contentElement.name); };
 
       iconCell.appendChild(elementButton);
@@ -82,7 +82,7 @@ module.exports = {
         downloadCell.appendChild(commitButton);
       }
     } else {
-      elementButton.innerHTML = "<span class='icon is-small'><i class='far fa-file'></i></span> &emsp;" + contentElement.name;
+      elementButton.innerHTML = `<span class='icon is-small'><i class='far fa-file'></i></span> &emsp; ${contentElement.name}`;
       elementButton.setAttribute("disabled", "");
 
       if (_globalIsInDownLoadMode) {
@@ -103,6 +103,35 @@ module.exports = {
 
     tableRow.appendChild(iconCell);
     tableRow.appendChild(downloadCell);
+
+    return tableRow;
+  },
+  /**
+   * Creates a row for the content of a problem.
+   * @param {*} contentElement
+   */
+  createLCContentRow: function createLCContentRow(contentElement) {
+    const tableRow = document.createElement("tr");
+
+    const probNumCell = document.createElement("td");
+
+    const elementButton = document.createElement("button");
+    elementButton.classList.add("button");
+    elementButton.classList.add("is-small");
+    elementButton.classList.add("is-link");
+    elementButton.innerHTML = contentElement.probNum;
+    elementButton.onclick = () => { showProblem(contentElement.probNum); };
+    probNumCell.appendChild(elementButton);
+
+    const probTitleCell = document.createElement("td");
+    probTitleCell.innerHTML = contentElement.probTitle;
+
+    const probDiffCell = document.createElement("td");
+    probDiffCell.innerHTML = contentElement.probDiff;
+
+    tableRow.appendChild(probNumCell);
+    tableRow.appendChild(probTitleCell);
+    tableRow.appendChild(probDiffCell);
 
     return tableRow;
   },

@@ -10,6 +10,7 @@ const _globalPref = new Preference();
 const _globalCommonJS = require("./renderer/common");
 const _globalLeetCodeJS = require("./renderer/leetCodeModal");
 
+let probList = null;
 let isAppMaximized = false;
 let _globalIsInDownLoadMode = true;
 
@@ -107,6 +108,18 @@ function launchLeetCodeModal() {
   _globalIPCRenderer.send("leetcode-user");
   document.getElementById("leetCodeModal").classList.add("is-active");
   document.documentElement.classList.add("is-clipped");
+  _globalLeetCodeJS.postModalLaunchSteps();
+}
+
+/**
+ * Launch the LeetCode List Modal
+ */
+function launchLeetCodeListModal() {
+  if (probList == null) {
+    _globalIPCRenderer.send("leetcode-list");
+  }
+  document.getElementById("leetCodeListModal").classList.add("is-active");
+  document.documentElement.classList.add("is-clipped");
 }
 
 /**
@@ -118,11 +131,29 @@ function closeLeetCodeModal() {
 }
 
 /**
+ * Close the LeetCode modal
+ */
+function closeLeetCodeListModal() {
+  document.getElementById("leetCodeListModal").classList.remove("is-active");
+  document.documentElement.classList.remove("is-clipped");
+}
+
+/**
  * Log out of LeetCode.
  */
 function leetCodeLogOut() {
   document.getElementById("logoutLeetCodeButton").classList.add("is-loading");
+  _globalLeetCodeJS.clearLCModalContent();
   _globalIPCRenderer.send("leetcode-logout");
+}
+
+/**
+ * Display the problem description of the provided problem
+ * @param {*} probNum
+ */
+function showProblem(probNum) {
+  closeLeetCodeListModal();
+  _globalIPCRenderer.send("leetcode-prob", probNum);
 }
 
 /**
@@ -253,7 +284,6 @@ _globalIPCRenderer.on("leetcode-user-logged-in", (event, stdout) => {
  * Handle the LeetCode CLI user response.
  */
 _globalIPCRenderer.on("leetcode-user", (event, stdout) => {
-  console.log(stdout);
   if (document.getElementById("leetCodeLogStatusControl").classList.contains("is-loading")) {
     document.getElementById("leetCodeLogStatusControl").classList.remove("is-loading");
   }
@@ -285,19 +315,23 @@ _globalIPCRenderer.on("leetcode-stat", (event, stdout) => {
 /**
  * Handle the LeetCode CLI user response.
  */
-_globalIPCRenderer.on("leetcode-list", (event, stdout) => {
+_globalIPCRenderer.on("leetcode-list", (event, curProbList) => {
   if (document.getElementById("leetCodeListControl").classList.contains("is-loading")) {
     document.getElementById("leetCodeListControl").classList.remove("is-loading");
   }
-  const formattedList = "";
-  const lcList = stdout.split("\n");
-  lcList.forEach((problem) => {
-    console.log(problem);
-    formattedList.concat(problem.trim());
-    formattedList.concat("\n");
+
+  probList = curProbList;
+  const listNode = document.getElementById("leetCodeListControl");
+  while (listNode.firstChild) {
+    listNode.removeChild(listNode.firstChild);
+  }
+
+  const table = _globalCommonJS.createTable("probListTable", "probListTableBody");
+  probList.forEach((prob) => {
+    const tableRow = _globalCommonJS.createLCContentRow(prob);
+    table.appendChild(tableRow);
   });
-  console.log(formattedList);
-  document.getElementById("leetCodeList").value = stdout;
+  listNode.appendChild(table);
 });
 
 
@@ -305,9 +339,9 @@ _globalIPCRenderer.on("leetcode-list", (event, stdout) => {
  * Handle the LeetCode CLI user response.
  */
 _globalIPCRenderer.on("leetcode", (event, command, stdout, stderr) => {
-  console.log(command);
-  console.log(stdout);
-  console.log(stderr);
+  if (stderr) {
+    console.log(stderr);
+  }
 
   if (command === "version") {
     if (document.getElementById("leetCodeVersionControl").classList.contains("is-loading")) {
@@ -315,4 +349,11 @@ _globalIPCRenderer.on("leetcode", (event, command, stdout, stderr) => {
     }
     document.getElementById("leetCodeVersion").value = stdout;
   }
+});
+
+/**
+ * Handle the "leetcode-prob" event.
+ */
+_globalIPCRenderer.on("leetcode-prob", (event, desc) => {
+  updateDesc(desc);
 });

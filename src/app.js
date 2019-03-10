@@ -25,6 +25,7 @@ let repository;
 let pref;
 let gitHub;
 let gHUser;
+let probList = null;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -287,10 +288,6 @@ ipcMain.on("leetcode-user", (event) => {
           leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("stat"), (stdStat) => {
             mainWindow.webContents.send("leetcode-stat", stdStat);
           });
-
-          leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("list"), (stdList) => {
-            mainWindow.webContents.send("leetcode-list", stdList);
-          });
         });
       } else {
         mainWindow.webContents.send("leetcode-user", cliConstants.NOT_LOGGED_IN_NO_CRED);
@@ -301,15 +298,31 @@ ipcMain.on("leetcode-user", (event) => {
       leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("stat"), (stdStat) => {
         mainWindow.webContents.send("leetcode-stat", stdStat);
       });
-
-      leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("list"), (stdList) => {
-        mainWindow.webContents.send("leetcode-list", stdList);
-      });
     }
   });
 });
 
+ipcMain.on("leetcode-list", (event) => {
+  if (probList == null) {
+    leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("list"), (stdList) => {
+      leetCodeJS.transformList(stdList, (curProbList) => {
+        probList = curProbList;
+        mainWindow.webContents.send("leetcode-list", probList);
+      });
+    });
+  } else {
+    mainWindow.webContents.send("leetcode-list", probList);
+  }
+});
+
+ipcMain.on("leetcode-prob", (event, probNum) => {
+  leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat(`show ${probNum}`), (stdOut) => {
+    mainWindow.webContents.send("leetcode-prob", stdOut);
+  });
+});
+
 ipcMain.on("leetcode-logout", (event) => {
+  probList = null;
   leetCodeJS.leetCodeExec(exec, lCodeBaseCommand.concat("user -L"), (stdout, stderr) => {
     mainWindow.webContents.send("leetcode-logout", stdout, stderr);
   });
