@@ -1,4 +1,38 @@
-/** Functions for the GitHub Modal */
+// eslint-disable-next-line import/no-unresolved
+import {
+  createSpanButton, createTable, createWrappingDiv, getDescriptionContent, getSolutionContent,
+} from "../common/common";
+
+/**
+ * Launch the GitHub Commit modal
+ */
+function launchGitHubCommitModal() {
+  _globalDownLoadModeInd = true;
+  document.getElementById("gitHubCommitModal").classList.add("is-active");
+  document.documentElement.classList.add("is-clipped");
+  document.getElementById("commitDescFilePathInput").value = _globalRepoInfo.getDescPath();
+  document.getElementById("commitCodeFilePathInput").value = _globalRepoInfo.getSolPath();
+}
+
+/**
+ * Launch the GitHub Repo. modal
+ */
+function launchGitHubRepoModal() {
+  _globalDownLoadModeInd = true;
+  _globalRepoInfo.clearContents();
+  document.getElementById("gitHubRepoModal").classList.add("is-active");
+  document.documentElement.classList.add("is-clipped");
+  document.getElementById("gitHubRepoBackButton").innerHTML = "Close";
+  _globalIPCRenderer.send("list-repos");
+}
+
+/**
+ * Launch the GitHub Modal to select a directory to commit to.
+ */
+function launchGitHubRepoModalForCommit() {
+  launchGitHubRepoModal();
+  _globalDownLoadModeInd = false;
+}
 
 /**
  * Toggles the enabled/disabled state of the buttons related to GitHub.
@@ -11,14 +45,6 @@ function toggleGitHubButtons() {
     document.getElementById("gHdownloadContentButton").disabled = true;
     document.getElementById("gHCommitButton").disabled = true;
   }
-}
-
-/**
- * Launch the GitHub Modal to select a directory to commit to.
- */
-function launchGitHubRepoModalForCommit() {
-  launchGitHubRepoModal();
-  _globalIsInDownLoadMode = false;
 }
 
 /**
@@ -39,7 +65,7 @@ function doGitHubCommit() {
   document.getElementById("gitHubCommitButton").classList.add("is-loading");
   _globalRepoInfo.setDescPath(document.getElementById("commitDescFilePathInput").value);
   _globalRepoInfo.setSolPath(document.getElementById("commitCodeFilePathInput").value);
-  _globalIPCRenderer.send("commit-github", _globalRepoInfo, descEditor.getValue(), codeEditor.getValue(), document.getElementById("commitMessageInput").value);
+  _globalIPCRenderer.send("commit-github", _globalRepoInfo, _globalDescEditor.getValue(), _globalCodeEditor.getValue(), document.getElementById("commitMessageInput").value);
 }
 
 /**
@@ -52,19 +78,6 @@ function setCommitToModal(descCommit, solCommit) {
   document.getElementById("commitSHA1").value = descCommit;
   document.getElementById("commitSHA2").value = solCommit;
 }
-
-/**
- * Launch the GitHub Repo. modal
- */
-function launchGitHubRepoModal() {
-  _globalIsInDownLoadMode = true;
-  _globalRepoInfo.clearContents();
-  document.getElementById("gitHubRepoModal").classList.add("is-active");
-  document.documentElement.classList.add("is-clipped");
-  document.getElementById("gitHubRepoBackButton").innerHTML = "Close";
-  _globalIPCRenderer.send("list-repos");
-}
-
 /**
  * Close the GitHub Repo. modal
  */
@@ -107,17 +120,6 @@ function backGitHubRepoModal() {
 }
 
 /**
- * Launch the GitHub Commit modal
- */
-function launchGitHubCommitModal() {
-  _globalIsInDownLoadMode = true;
-  document.getElementById("gitHubCommitModal").classList.add("is-active");
-  document.documentElement.classList.add("is-clipped");
-  document.getElementById("commitDescFilePathInput").value = _globalRepoInfo.getDescPath();
-  document.getElementById("commitCodeFilePathInput").value = _globalRepoInfo.getSolPath();
-}
-
-/**
  * Close the GitHub Commit modal
  */
 function closeGitHubCommitModal() {
@@ -150,7 +152,7 @@ function getRepoContent(repoUser, repoName) {
 
 /**
  * Get the content of the branch.
- * @param {String} branchRef
+  * @param {String} branchRef
  */
 function getBranchContent(branchRef) {
   document.getElementById("gitHubRepoModalContent").removeChild(document.getElementById("branchListDiv"));
@@ -179,9 +181,9 @@ function populateReposList(repoList) {
   document.getElementById("gitHubRepoModalTitleP").innerHTML = "GitHub Repositories";
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
-  const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("repoListDiv");
+  const wrappingTagsDiv = createWrappingDiv("repoListDiv");
   Object.keys(repoList).forEach((key) => {
-    const repoButton = _globalCommonJS.createSpanButton(repoList[key].name);
+    const repoButton = createSpanButton(repoList[key].name);
     repoButton.onclick = () => {
       document.getElementById("gitHubRepoBackButton").innerHTML = "Back";
       getRepoContent(repoList[key].owner.login, repoList[key].name);
@@ -198,9 +200,9 @@ function populateBranchList(branchList) {
   document.getElementById("gitHubRepoModalTitleP").innerHTML = "Repository Branches";
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
-  const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("branchListDiv");
+  const wrappingTagsDiv = createWrappingDiv("branchListDiv");
   Object.keys(branchList).forEach((key) => {
-    const branchButton = _globalCommonJS.createSpanButton(branchList[key].name);
+    const branchButton = createSpanButton(branchList[key].name);
     branchButton.onclick = () => {
       getBranchContent(branchList[key].name);
     };
@@ -216,12 +218,92 @@ function populateContentList(contentList) {
   document.getElementById("gitHubRepoModalTitleP").innerHTML = "Branch Content";
   const loadingButton = document.getElementById("gitHubRepoLoadingButton");
   loadingButton.style.display = "none";
-  const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("contentListDiv");
-  const table = _globalCommonJS.createTable("contentListTable", "contentListTableBody");
+  const wrappingTagsDiv = createWrappingDiv("contentListDiv");
+  const table = createTable("contentListTable", "contentListTableBody");
   Object.keys(contentList).forEach((key) => {
-    const tableRow = _globalCommonJS.createGHContentRow(contentList[key]);
+    const tableRow = createGHContentRow(contentList[key]);
     table.appendChild(tableRow);
   });
   wrappingTagsDiv.appendChild(table);
   document.getElementById("gitHubRepoModalContent").appendChild(wrappingTagsDiv);
 }
+
+/**
+ * Creates a row for the content of the branch/directory on the table.
+   * @param {*} contentElement
+ */
+function createGHContentRow(contentElement) {
+  const tableRow = document.createElement("tr");
+  const iconCell = document.createElement("td");
+  const downloadCell = document.createElement("td");
+  const elementButton = document.createElement("button");
+  const commitButton = document.createElement("button");
+  const downloadDescButton = document.createElement("button");
+  const downloadCodeButton = document.createElement("button");
+
+  elementButton.classList.add("button");
+  elementButton.classList.add("is-small");
+
+  commitButton.classList.add("button");
+  commitButton.classList.add("is-small");
+  commitButton.classList.add("is-link");
+
+  downloadDescButton.classList.add("button");
+  downloadDescButton.classList.add("is-small");
+  downloadDescButton.classList.add("is-link");
+
+  downloadCodeButton.classList.add("button");
+  downloadCodeButton.classList.add("is-small");
+  downloadCodeButton.classList.add("is-link");
+
+  if (contentElement.type === "dir") {
+    elementButton.innerHTML = `<span class='icon is-small'><i class='far fa-folder'></i></span> &emsp; ${contentElement.name}`;
+    elementButton.onclick = () => { getDirContent(contentElement.name); };
+
+    iconCell.appendChild(elementButton);
+
+    if (!_globalDownLoadModeInd) {
+      commitButton.innerHTML = "<span class='icon is-small'><i class='fas fa-upload'></i></span> &emsp; Commit Here";
+      commitButton.onclick = () => { startGitHubCommit(contentElement.path); };
+      commitButton.setAttribute("title", "Write to GitHub");
+      downloadCell.appendChild(commitButton);
+    }
+  } else {
+    elementButton.innerHTML = `<span class='icon is-small'><i class='far fa-file'></i></span> &emsp; ${contentElement.name}`;
+    elementButton.setAttribute("disabled", "");
+
+    if (_globalDownLoadModeInd) {
+      downloadDescButton.innerHTML = "<span class='icon is-small'><i class='fas fa-download'></i></span> &emsp; Description";
+      downloadDescButton.onclick = () => { getDescriptionContent(contentElement.download_url); };
+      downloadDescButton.setAttribute("title", "Download/Set Description");
+
+      downloadCodeButton.innerHTML = "<span class='icon is-small'><i class='fas fa-download'></i></span> &emsp; Solution";
+      downloadCodeButton.onclick = () => { getSolutionContent(contentElement.download_url); };
+      downloadCodeButton.setAttribute("title", "Download/Set Solution");
+
+      downloadCell.appendChild(downloadDescButton);
+      downloadCell.appendChild(downloadCodeButton);
+    }
+
+    iconCell.appendChild(elementButton);
+  }
+
+  tableRow.appendChild(iconCell);
+  tableRow.appendChild(downloadCell);
+
+  return tableRow;
+}
+
+export {
+  launchGitHubRepoModal,
+  launchGitHubRepoModalForCommit,
+  closeGitHubRepoModal,
+  closeGitHubCommitModal,
+  toggleGitHubButtons,
+  doGitHubCommit,
+  setCommitToModal,
+  backGitHubRepoModal,
+  populateReposList,
+  populateBranchList,
+  populateContentList,
+};

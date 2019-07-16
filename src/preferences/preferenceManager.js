@@ -1,4 +1,4 @@
-import { Preference } from "./preference";
+const { Preference } = require("../preferences/preference").default;
 
 module.exports = {
   readCurrentPref: function readCurrentPref(settings) {

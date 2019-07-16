@@ -1,4 +1,7 @@
-export class Preference {
+/**
+ * Class that represents the user's preferences.
+ */
+class Preference {
   constructor() {
     this.jDoodleClientID = "";
     this.jDoodleClientSecret = "";
@@ -15,3 +18,7 @@ export class Preference {
     this.leetCodePassword = "";
   }
 }
+
+export default {
+  Preference,
+};

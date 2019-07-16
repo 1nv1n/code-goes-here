@@ -1,5 +1,3 @@
-/** JDoodle Functions */
-
 /**
  * Send code to the main process to be executed.
  * @param {String} editorText
@@ -32,3 +30,9 @@ function toggleJDoodleButtons() {
     document.getElementById("jDoodleExecuteButton").disabled = true;
   }
 }
+
+export {
+  sendCodeToMainProcess,
+  checkJDoodleUsage,
+  toggleJDoodleButtons,
+};

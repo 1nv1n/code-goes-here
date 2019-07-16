@@ -1,19 +1,28 @@
 {
   "extends": "eslint-config-airbnb",
+  "env": {
+    "amd": true
+  },
   "globals": {
-    "document": false,
+    "document": "readonly",
+    "self": "readonly",
+    "monaco": "readonly",
     "_globalIPCRenderer": "readonly",
     "_globalRepoInfo": "readonly",
     "_globalPref": "readonly",
-    "_globalCommonJS": "readonly",
-    "_globalLeetCodeJS": "readonly",
-    "_globalIsInDownLoadMode": "writable"
+    "_globalPathModule": "readonly",
+    "_globalAMDRequire": "readonly",
+    "_globalLanguageArr": "readonly",
+    "_globalProbList": "writable",
+    "_globalDownLoadModeInd": "writable",
+    "_globalCodeEditor": "writable",
+    "_globalDescEditor": "writable"
   },
   "rules": {
     "import/extensions": 0,
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": [
-      2,
+      1,
       {
         "ignore": [
           "electron"
@@ -51,13 +60,18 @@
         "allow": [
           "_globalIPCRenderer",
           "_globalRepoInfo",
+          "_globalLanguageArr",
+          "_globalPathModule",
+          "_globalAMDRequire",
           "_globalPref",
-          "_globalIsInDownLoadMode",
-          "_globalCommonJS",
-          "_globalLeetCodeJS"
+          "_globalProbList",
+          "_globalCodeEditor",
+          "_globalDescEditor",
+          "_globalDownLoadModeInd"
         ]
       }
     ],
+    "no-restricted-globals": ["self"],
     "no-unused-vars": [
       "error",
       {

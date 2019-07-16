@@ -11,12 +11,16 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
   app.quit();
 }
 
+// Modules
 const fileSystem = require("fs");
 const settings = require("electron-settings");
-const prefManagerJS = require("./preferences/preferenceManager");
-const jDoodleJS = require("./jdoodle/jDoodle");
-const gitHubJS = require("./github/gitHub");
+
+// API wrappers
+const jDoodleJS = require("./jdoodle/jDoodleAPI");
+const gitHubJS = require("./github/gitHubAPI");
 const leetCodeJS = require("./leetcode/leetCode");
+
+const prefManagerJS = require("./preferences/preferenceManager");
 const cliConstants = require("./leetcode/cliConstants");
 
 const lCodeBaseCommand = "leetcode ";
@@ -44,6 +48,7 @@ const createWindow = () => {
     titleBarStyle: "hidden",
     toolbar: false,
     width: screen.getPrimaryDisplay().workAreaSize.width - 50,
+    nodeIntegration: false
   });
 
   // And load the main HTML of the app.
@@ -218,7 +223,7 @@ ipcMain.on("get-repo", (event, repoUser, repoName) => {
 
 ipcMain.on("get-branch", (event, ref) => {
   repository.getContents(ref, "", false, (err, contentArr) => {
-    contentArr.sort(createComparator());
+    contentArr.sort(gitHubJS.createRepoComparator());
     mainWindow.webContents.send("branch-contents", contentArr);
   });
 });
@@ -230,7 +235,7 @@ ipcMain.on("get-dir", (event, repoInfo) => {
     dirPath += "/";
   });
   repository.getContents(repoInfo.branchRef, dirPath, false, (err, contentArr) => {
-    contentArr.sort(createComparator());
+    contentArr.sort(gitHubJS.createRepoComparator());
     mainWindow.webContents.send("dir-contents", contentArr);
   });
 });
@@ -333,24 +338,3 @@ ipcMain.on("leetcode-command", (event, command) => {
     mainWindow.webContents.send("leetcode", command, stdout, stderr);
   });
 });
-
-/**
- * A comparator to sort files & directories by name.
- * Intended for the Repository.getContents response.
- */
-function createComparator() {
-  return function sortByName(a, b) {
-    const nameA = a.name.trim().toLowerCase();
-    const nameB = b.name.trim().toLowerCase();
-
-    if (nameA < nameB) {
-      return -1;
-    }
-
-    if (nameA > nameB) {
-      return 1;
-    }
-
-    return 0;
-  };
-}

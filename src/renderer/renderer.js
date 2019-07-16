@@ -1,18 +1,28 @@
 import { ipcRenderer } from "electron";
-import { Repository } from "./github/repository";
-import { Preference } from "./preferences/preference";
+const _globalIPCRenderer = ipcRenderer;
 
 const { BrowserWindow } = require("electron").remote;
 
-const _globalIPCRenderer = ipcRenderer;
-const _globalRepoInfo = new Repository();
-const _globalPref = new Preference();
-const _globalCommonJS = require("./renderer/common");
-const _globalLeetCodeJS = require("./renderer/leetCodeModal");
+const { createTable, closeDownloadModal, uriFromPath } = require("../common/common");
+const { toggleLeetCodeButtons, createLCContentRow } = require("../leetcode/leetCodeRenderer");
+const { toggleJDoodleButtons } = require("../jdoodle/jDoodleRenderer");
+const { setCurrentPref, setLocalPref } = require("../preferences/settingsRenderer");
+const {
+  setCommitToModal, populateReposList, populateBranchList, populateContentList, toggleGitHubButtons,
+} = require("../github/gitHubRenderer");
 
-let probList = null;
+_globalAMDRequire.config({
+  baseUrl: uriFromPath(_globalPathModule.join(__dirname, "../../node_modules/monaco-editor/min")),
+});
+
+const { updateDesc } = require("../monaco/monaco-description");
+const { updateCode } = require("../monaco/monaco-code");
+
+let _globalProbList = null;
 let isAppMaximized = false;
-let _globalIsInDownLoadMode = true;
+
+// eslint-disable-next-line prefer-const
+let _globalDownLoadModeInd = true;
 
 /**
  * Minimize the App.
@@ -55,7 +65,7 @@ function setLocalDefault() {
  * TODO: Make this configurable.
  */
 function setRemoteDefault() {
-  _globalIPCRenderer.send("download", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/Template.md", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/Template.java");
+  _globalIPCRenderer.send("download", "https://raw.githubusercontent.com/1nv1n/ProgrammingFundamentals/master/Template/Template.md", "https://raw.githubusercontent.com/1nv1n/ogrammingFundamentals/master/Template/Template.java");
 }
 
 /**
@@ -70,23 +80,7 @@ function downloadContent() {
  * Save Description & Solution locally.
  */
 function saveLocal() {
-  _globalIPCRenderer.send("save-local", descEditor.getValue(), codeEditor.getValue());
-}
-
-/**
- * Get the content of the description from the provided URL.
- * @param {String} downloadURL
- */
-function getDescriptionContent(downloadURL) {
-  _globalIPCRenderer.send("get-desc", downloadURL);
-}
-
-/**
- * Get the content of the solution from the provided URL.
- * @param {String} downloadURL
- */
-function getSolutionContent(downloadURL) {
-  _globalIPCRenderer.send("get-sol", downloadURL);
+  _globalIPCRenderer.send("save-local", _globalDescEditor.getValue(), _globalCodeEditor.getValue());
 }
 
 /**
@@ -96,69 +90,14 @@ _globalIPCRenderer.on("main-window-ready", (event, savedPref) => {
   setCurrentPref(savedPref);
   toggleJDoodleButtons();
   toggleGitHubButtons();
-  _globalLeetCodeJS.toggleLeetCodeButtons();
+  toggleLeetCodeButtons();
   setLocalPref();
 });
 
 /**
- * Launch the LeetCode Modal
- */
-function launchLeetCodeModal() {
-  _globalIPCRenderer.send("leetcode-version");
-  _globalIPCRenderer.send("leetcode-user");
-  document.getElementById("leetCodeModal").classList.add("is-active");
-  document.documentElement.classList.add("is-clipped");
-  _globalLeetCodeJS.postModalLaunchSteps();
-}
-
-/**
- * Launch the LeetCode List Modal
- */
-function launchLeetCodeListModal() {
-  if (probList == null) {
-    _globalIPCRenderer.send("leetcode-list");
-  }
-  document.getElementById("leetCodeListModal").classList.add("is-active");
-  document.documentElement.classList.add("is-clipped");
-}
-
-/**
- * Close the LeetCode modal
- */
-function closeLeetCodeModal() {
-  document.getElementById("leetCodeModal").classList.remove("is-active");
-  document.documentElement.classList.remove("is-clipped");
-}
-
-/**
- * Close the LeetCode modal
- */
-function closeLeetCodeListModal() {
-  document.getElementById("leetCodeListModal").classList.remove("is-active");
-  document.documentElement.classList.remove("is-clipped");
-}
-
-/**
- * Log out of LeetCode.
- */
-function leetCodeLogOut() {
-  document.getElementById("logoutLeetCodeButton").classList.add("is-loading");
-  _globalLeetCodeJS.clearLCModalContent();
-  _globalIPCRenderer.send("leetcode-logout");
-}
-
-/**
- * Display the problem description of the provided problem
- * @param {*} probNum
- */
-function showProblem(probNum) {
-  closeLeetCodeListModal();
-  _globalIPCRenderer.send("leetcode-prob", probNum);
-}
-
-/**
  * Handle the "compiled" event.
  */
+// eslint-disable-next-line no-unused-vars
 _globalIPCRenderer.on("compiled", (event, code) => {
   document.getElementById("jDoodleExecuteButton").classList.remove("is-loading");
 });
@@ -182,6 +121,7 @@ _globalIPCRenderer.on("downloaded", (event, values) => {
 /**
  * Handle the "check-usage" event.
  */
+// eslint-disable-next-line no-unused-vars
 _globalIPCRenderer.on("usage-checked", (event, code) => {
   document.getElementById("jDoodleUsageButton").classList.remove("is-loading");
 });
@@ -193,7 +133,7 @@ _globalIPCRenderer.on("desc-template", (event, desc) => {
   if (document.getElementById("setLocalDefBtn").classList.contains("is-loading")) {
     document.getElementById("setLocalDefBtn").classList.remove("is-loading");
   }
-  descEditor.setValue(desc);
+  _globalDescEditor.setValue(desc);
 });
 
 /**
@@ -203,7 +143,7 @@ _globalIPCRenderer.on("sol-template", (event, code) => {
   if (document.getElementById("setLocalDefBtn").classList.contains("is-loading")) {
     document.getElementById("setLocalDefBtn").classList.remove("is-loading");
   }
-  codeEditor.setValue(code);
+  _globalCodeEditor.setValue(code);
 });
 
 /**
@@ -320,20 +260,19 @@ _globalIPCRenderer.on("leetcode-list", (event, curProbList) => {
     document.getElementById("leetCodeListControl").classList.remove("is-loading");
   }
 
-  probList = curProbList;
+  _globalProbList = curProbList;
   const listNode = document.getElementById("leetCodeListControl");
   while (listNode.firstChild) {
     listNode.removeChild(listNode.firstChild);
   }
 
-  const table = _globalCommonJS.createTable("probListTable", "probListTableBody");
-  probList.forEach((prob) => {
-    const tableRow = _globalCommonJS.createLCContentRow(prob);
+  const table = createTable("probListTable", "probListTableBody");
+  _globalProbList.forEach((prob) => {
+    const tableRow = createLCContentRow(prob);
     table.appendChild(tableRow);
   });
   listNode.appendChild(table);
 });
-
 
 /**
  * Handle the LeetCode CLI user response.
@@ -357,3 +296,13 @@ _globalIPCRenderer.on("leetcode", (event, command, stdout, stderr) => {
 _globalIPCRenderer.on("leetcode-prob", (event, desc) => {
   updateDesc(desc);
 });
+
+export {
+  minimizeApp,
+  maximizeApp,
+  closeApp,
+  setLocalDefault,
+  setRemoteDefault,
+  downloadContent,
+  saveLocal,
+};

@@ -1,5 +1,5 @@
 /** Contains methods related to LeetCode operations */
-import { LCProb } from "./lcProb";
+import { Problem } from "./problem";
 
 module.exports = {
   leetCodeExec: function leetCodeExec(exec, command, callback) {
@@ -35,43 +35,45 @@ module.exports = {
     });
   },
   transformList: function transformList(stdList, callback) {
-    let curProb;
-    let probTitleWithDiff;
-
     const probList = [];
-    const lcList = stdList.split("\n");
 
-    lcList.forEach((probRow) => {
+    stdList.split("\n").forEach((probRow) => {
       if (probRow.trim().length > 0) {
-        curProb = new LCProb();
+        const curProb = new Problem();
+
+        const lastOpenSquareBracketIdx = probRow.lastIndexOf("[");
+        const lastOpenRoundBracketIdx = probRow.lastIndexOf("(");
+        const lastClosedSquareBracketIdx = probRow.lastIndexOf("]");
+        const lastClosedRoundBracketIdx = probRow.lastIndexOf(")");
+
         curProb.probNum = probRow.substring(
-          probRow.lastIndexOf("[") + 1,
-          probRow.lastIndexOf("]"),
+          lastOpenSquareBracketIdx + 1,
+          lastClosedSquareBracketIdx,
         ).trim();
 
         curProb.probAcc = probRow.substring(
-          probRow.lastIndexOf("(") + 1,
-          probRow.lastIndexOf(")"),
+          lastOpenRoundBracketIdx + 1,
+          lastClosedRoundBracketIdx,
         ).trim();
 
-        probTitleWithDiff = probRow.substring(
-          probRow.lastIndexOf("]") + 1,
-          probRow.lastIndexOf("("),
+        const probTitleWithDiff = probRow.substring(
+          lastClosedSquareBracketIdx + 1,
+          lastOpenRoundBracketIdx,
         ).trim();
 
         if (probTitleWithDiff.includes("Easy")) {
           curProb.probDiff = "Easy";
-          curProb.probTitle = probTitleWithDiff.replace("Easy", "").trim();
+          curProb.probTitle = probTitleWithDiff.replace("Easy", "");
         } else if (probTitleWithDiff.includes("Medium")) {
           curProb.probDiff = "Medium";
-          curProb.probTitle = probTitleWithDiff.replace("Medium", "").trim();
+          curProb.probTitle = probTitleWithDiff.replace("Medium", "");
         } else if (probTitleWithDiff.includes("Hard")) {
           curProb.probDiff = "Hard";
-          curProb.probTitle = probTitleWithDiff.replace("Hard", "").trim();
+          curProb.probTitle = probTitleWithDiff.replace("Hard", "");
         } else {
           curProb.probDiff = "Undef.Diff";
-          curProb.probTitle = probTitleWithDiff.trim();
         }
+        curProb.probTitle = probTitleWithDiff.trim();
 
         probList.push(curProb);
       }

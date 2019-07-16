@@ -1,3 +1,8 @@
+/**
+ * Return the value by poperty name.
+ * @param {String} name
+ * @param {String} value
+ */
 function define(name, value) {
   Object.defineProperty(exports, name, {
     value: value,

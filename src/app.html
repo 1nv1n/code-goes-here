@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css" />
   <!-- App CSS -->
   <link rel="stylesheet" href="./app.css" />
-  <!-- Monaco CSS -->
-  <link rel="stylesheet" href="./monaco/monaco.css" />
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet" />
@@ -25,16 +23,22 @@
   <!-- Font Awesome! -->
   <script defer src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
 
-  <!-- Renderer JS -->
-  <script defer src="./renderer/renderer.js"></script>
-  <script defer src="./renderer/downloadModal.js"></script>
-  <script defer src="./renderer/settingsModal.js"></script>
-  <script defer src="./renderer/jDoodleModal.js"></script>
-  <script defer src="./renderer/gitHubModal.js"></script>
+  <!-- Globals -->
+  <script>
+    let _globalCodeEditor;
+    let _globalDescEditor;
 
-  <!-- Monaco Editor -->
-  <script defer src="./monaco/monaco-description.js"></script>
-  <script defer src="./monaco/monaco-code.js"></script>
+    const amdLoader = require("../node_modules/monaco-editor/min/vs/loader");
+    const _globalPathModule = require("path");
+    const _globalAMDRequire = amdLoader.require;
+
+    const { Repository } = require("./github/repository.js").default;
+    const { Preference } = require("./preferences/preference.js").default;
+    const _globalLanguageArr = require("./jdoodle/languages.js");
+
+    const _globalRepoInfo = new Repository();
+    const _globalPref = new Preference();
+  </script>
 </head>
 
 <body>
@@ -46,13 +50,13 @@
         &nbsp;CodeGoesHere
       </span>
       <div class="buttons is-pulled-right titlebar-buttons">
-        <button title="Minimize" class="button is-small is-link" onClick="minimizeApp()">
+        <button title="Minimize" id="minimizeAppBtn" class="button is-small is-link" onClick="minimizeApp()">
           <span class="icon is-small"> <i class="fas fa-minus"></i> </span>
         </button>
-        <button title="Maximize" class="button is-small is-link" onClick="maximizeApp()">
+        <button title="Maximize" id="maximizeAppBtn" class="button is-small is-link" onClick="maximizeApp()">
           <span class="icon is-small"> <i id="maximizeAppBtnIcon" class="fas fa-square"></i> </span>
         </button>
-        <button title="Quit/Close" class="button is-small is-link" onClick="closeApp()">
+        <button title="Quit/Close" id="closeAppBtn" class="button is-small is-link" onClick="closeApp()">
           <span class="icon is-small"> <i class="fas fa-times"></i> </span>
         </button>
       </div>
@@ -495,5 +499,18 @@
     </div>
   </div>
 </body>
+
+<script> // https://github.com/electron/electron/issues/2863
+  require('./renderer/renderer.js');
+
+  const { minimizeApp, maximizeApp, closeApp, setLocalDefault, saveLocal, setRemoteDefault, launchGitHubRepoModal, launchGitHubRepoModalForCommit, downloadContent } = require("./renderer/renderer.js");
+  const { launchSettingsModal, saveSettings, resetSettings, closeSettingsModal, switchToCredTab, switchToPrefTab } = require("./preferences/settingsRenderer.js");
+  const { clearCode, toggleMonColCode, openLanguageModal, sendCodeForExecution, closeLanguageModal } = require("./monaco/monaco-code.js");
+  const { clearDesc, toggleMonColDesc } = require("./monaco/monaco-description.js");
+  const { checkJDoodleUsage } = require("./jdoodle/jDoodleRenderer.js");
+  const { doGitHubCommit, closeGitHubRepoModal, backGitHubRepoModal, closeGitHubCommitModal } = require("./github/gitHubRenderer.js");
+  const { launchLeetCodeModal, launchLeetCodeListModal, leetCodeLogOut, closeLeetCodeModal } = require("./leetcode/leetCodeRenderer.js");
+  const { launchDownloadModal, closeDownloadModal } = require("./common/common.js");
+</script>
 
 </html>

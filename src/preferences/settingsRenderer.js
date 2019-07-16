@@ -1,4 +1,6 @@
-/** Functions for the Settings Modal */
+import { toggleGitHubButtons } from "../github/gitHubRenderer";
+import { toggleJDoodleButtons } from "../jdoodle/jDoodleRenderer";
+import { toggleLeetCodeButtons } from "../leetcode/leetCodeRenderer";
 
 /**
  * Sets the preferences on load.
@@ -11,7 +13,6 @@ function setCurrentPref(savedPref) {
   _globalPref.leetCodeUsername = savedPref.leetCodeUsername;
   _globalPref.leetCodePassword = savedPref.leetCodePassword;
 }
-
 /**
  * Sets the preference values.
  */
@@ -22,7 +23,6 @@ function setLocalPref() {
   document.getElementById("leetCodeUserInput").value = _globalPref.leetCodeUsername;
   document.getElementById("leetCodePassInput").value = _globalPref.leetCodePassword;
 }
-
 /**
  * Launch the settings modal
  */
@@ -30,7 +30,6 @@ function launchSettingsModal() {
   document.getElementById("settingsModal").classList.add("is-active");
   document.documentElement.classList.add("is-clipped");
 }
-
 /**
  * Close the settings modal
  */
@@ -38,7 +37,6 @@ function closeSettingsModal() {
   document.getElementById("settingsModal").classList.remove("is-active");
   document.documentElement.classList.remove("is-clipped");
 }
-
 /**
  * Save settings.
  */
@@ -48,12 +46,10 @@ function saveSettings() {
   _globalPref.gitHubToken = document.getElementById("gitHubTokenInput").value;
   _globalPref.leetCodeUsername = document.getElementById("leetCodeUserInput").value;
   _globalPref.leetCodePassword = document.getElementById("leetCodePassInput").value;
-
   _globalIPCRenderer.send("save-pref", _globalPref);
-
   toggleJDoodleButtons();
   toggleGitHubButtons();
-  _globalLeetCodeJS.toggleLeetCodeButtons();
+  toggleLeetCodeButtons();
   closeSettingsModal();
 }
 
@@ -67,7 +63,6 @@ function resetSettings() {
   document.getElementById("leetCodeUserInput").value = "";
   document.getElementById("leetCodePassInput").value = "";
 }
-
 /**
  * Switch to the "Credentials" tab on the settings modal
  */
@@ -75,20 +70,16 @@ function switchToCredTab() {
   if (document.getElementById("prefTab").classList.contains("is-active")) {
     document.getElementById("prefTab").classList.remove("is-active");
   }
-
   if (!document.getElementById("prefTabContent").classList.contains("is-hidden")) {
     document.getElementById("prefTabContent").classList.add("is-hidden");
   }
-
   if (!document.getElementById("credTab").classList.contains("is-active")) {
     document.getElementById("credTab").classList.add("is-active");
   }
-
   if (document.getElementById("credTabContent").classList.contains("is-hidden")) {
     document.getElementById("credTabContent").classList.remove("is-hidden");
   }
 }
-
 /**
  * Switch to the "Preferences" tab on the settings modal
  */
@@ -96,16 +87,24 @@ function switchToPrefTab() {
   if (document.getElementById("credTab").classList.contains("is-active")) {
     document.getElementById("credTab").classList.remove("is-active");
   }
-
   if (!document.getElementById("credTabContent").classList.contains("is-hidden")) {
     document.getElementById("credTabContent").classList.add("is-hidden");
   }
-
   if (!document.getElementById("prefTab").classList.contains("is-active")) {
     document.getElementById("prefTab").classList.add("is-active");
   }
-
   if (document.getElementById("prefTabContent").classList.contains("is-hidden")) {
     document.getElementById("prefTabContent").classList.remove("is-hidden");
   }
 }
+
+export {
+  setCurrentPref,
+  setLocalPref,
+  launchSettingsModal,
+  closeSettingsModal,
+  saveSettings,
+  resetSettings,
+  switchToCredTab,
+  switchToPrefTab,
+};

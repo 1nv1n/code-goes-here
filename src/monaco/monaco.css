@@ -1,6 +1,0 @@
-.monaco-editor {
-  width: 100%;
-  height: 90vh; /* TODO: Should be able to set this to 100% of parent container. */
-  perspective: 2000px;
-  animation: fadein 1s;
-}

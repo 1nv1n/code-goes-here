@@ -1,7 +1,7 @@
 const GitHubInstance = require("github-api");
 
 const reqPromise = require("request-promise");
-const constants = require("./../constants/constants");
+const constants = require("../constants/constants");
 
 module.exports = {
   createInstance: function createInstance(pref) {
@@ -61,5 +61,22 @@ module.exports = {
         }
       });
     });
+  },
+  /**
+   * A comparator to sort files & directories by name.
+   * Intended for the Repository.getContents response.
+   */
+  createRepoComparator: function createRepoComparator() {
+    return function sortByName(a, b) {
+      const nameA = a.name.trim().toLowerCase();
+      const nameB = b.name.trim().toLowerCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    };
   },
 };

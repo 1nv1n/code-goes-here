@@ -1,19 +1,40 @@
-// Import the supported languages
-const languageArr = require("./jdoodle/languages");
+const { createSpanButton, createWrappingDiv } = require("../common/common");
+const { sendCodeToMainProcess } = require("../jdoodle/jDoodleRenderer");
 
-// Define the editor objects
+// Define the editor object
 let monacoCodeEditor;
-let codeEditor;
 
 // Placeholder for the current language
 let currLang = ["java", "Java (JDK 1.8.0_66)", "0", "java"];
+
+/**
+ * Initialize the Monaco Code Editor.
+ */
+(function initCodeEditor() {// Workaround for monaco-css not understanding the environment
+  self.module = undefined;
+  _globalAMDRequire(["vs/editor/editor.main"], () => {
+    monacoCodeEditor = monaco.editor;
+    _globalCodeEditor = monaco.editor.create(document.getElementById("monCodeEditor"), {
+      automaticLayout: true, // This incurs some performance cost
+      insertSpaces: true,
+      language: currLang[3],
+      renderWhitespace: "all",
+      scrollBeyondLastLine: false,
+      tabSize: 2,
+      theme: "vs-dark",
+      value: [
+        "",
+      ].join("\n"),
+    });
+  });
+}());
 
 /**
  * Send the code to the renderer to be sent to the main process for execution.
  */
 function sendCodeForExecution() {
   document.getElementById("jDoodleExecuteButton").classList.add("is-loading");
-  sendCodeToMainProcess(codeEditor.getValue(), currLang[0], currLang[2]);
+  sendCodeToMainProcess(_globalCodeEditor.getValue(), currLang[0], currLang[2]);
 }
 
 /**
@@ -22,7 +43,7 @@ function sendCodeForExecution() {
  * @param {String} code
  */
 function updateCode(code) {
-  codeEditor.setValue(code);
+  _globalCodeEditor.setValue(code);
 }
 
 /**
@@ -39,7 +60,7 @@ function closeLanguageModal() {
  */
 function updateLanguage(language) {
   currLang = language;
-  monacoCodeEditor.setModelLanguage(codeEditor.getModel(), language[3]);
+  monacoCodeEditor.setModelLanguage(_globalCodeEditor.getModel(), language[3]);
   closeLanguageModal();
 }
 
@@ -48,7 +69,7 @@ function updateLanguage(language) {
  * @param {*} language
  */
 function createLanguageButton(language) {
-  const span = _globalCommonJS.createSpanButton(language[1]);
+  const span = createSpanButton(language[1]);
   span.onclick = () => { updateLanguage(language); };
   return span;
 }
@@ -57,9 +78,9 @@ function createLanguageButton(language) {
  * Populate languages in the modal.
  */
 function populateLanguages() {
-  const wrappingTagsDiv = _globalCommonJS.createWrappingDiv("languageButtonsDiv");
-  Object.keys(languageArr).forEach((key) => {
-    const languageTag = createLanguageButton(languageArr[key]);
+  const wrappingTagsDiv = createWrappingDiv("languageButtonsDiv");
+  Object.keys(_globalLanguageArr).forEach((key) => {
+    const languageTag = createLanguageButton(_globalLanguageArr[key]);
     wrappingTagsDiv.appendChild(languageTag);
   });
   document.getElementById("languageModalContent").appendChild(wrappingTagsDiv);
@@ -73,7 +94,6 @@ function openLanguageModal() {
   if (document.getElementById("languageButtonsDiv") === null) {
     populateLanguages();
   }
-
   document.getElementById("languageModal").classList.add("is-active");
   document.documentElement.classList.add("is-clipped");
 }
@@ -82,7 +102,7 @@ function openLanguageModal() {
  * Clear the content of the solution editor.
  */
 function clearCode() {
-  codeEditor.setValue("");
+  _globalCodeEditor.setValue("");
 }
 
 /**
@@ -128,43 +148,12 @@ function toggleMonColCode() {
   }
 }
 
-/**
- * Initialize the Monaco Code Editor.
- */
-(function initMonacoEditor() {
-  const path = require("path");
-  const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
-  const amdRequire = amdLoader.require;
-  const amdDefine = amdLoader.require.define;
-
-  function uriFromPath(_path) {
-    let pathName = path.resolve(_path).replace(/\\/g, "/");
-    if (pathName.length > 0 && pathName.charAt(0) !== "/") {
-      pathName = "/" + pathName;
-    }
-    return encodeURI("file://" + pathName);
-  }
-
-  amdRequire.config({
-    baseUrl: uriFromPath(path.join(__dirname, "../node_modules/monaco-editor/min")),
-  });
-
-  // Workaround for monaco-css not understanding the environment
-  self.module = undefined;
-
-  amdRequire(["vs/editor/editor.main"], function () {
-    monacoCodeEditor = monaco.editor;
-    codeEditor = monaco.editor.create(document.getElementById("monCodeEditor"), {
-      automaticLayout: true, // This incurs some performance cost
-      insertSpaces: true,
-      language: currLang[3],
-      renderWhitespace: "all",
-      scrollBeyondLastLine: false,
-      tabSize: 2,
-      theme: "vs-dark",
-      value: [
-        "",
-      ].join("\n"),
-    });
-  });
-})();
+export {
+  sendCodeForExecution,
+  updateCode,
+  closeLanguageModal,
+  openLanguageModal,
+  clearCode,
+  resetCode,
+  toggleMonColCode,
+};
