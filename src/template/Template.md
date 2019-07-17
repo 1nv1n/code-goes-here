@@ -8,16 +8,24 @@
 
 
 
-### Approach
+## Approach
+
+### Brute Force
 
 
-### Example
+## Example
 
 Input: ``.
 
 Output: ``.
 
 ## Analysis
+
+### Computational Complexity
+
+
+
+### Space Complexity
 
 
 
