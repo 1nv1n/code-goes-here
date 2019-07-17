@@ -8,11 +8,14 @@
 
 
 
+### Approach
+
+
 ### Example
 
-Sample Input: ``.
+Input: ``.
 
-Sample output: ``.
+Output: ``.
 
 ## Analysis
 
