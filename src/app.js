@@ -161,8 +161,8 @@ ipcMain.on("set-desc-local", (event) => {
   });
 });
 
-ipcMain.on("set-sol-local", (event, solLangFlag) => {
-  const path = (solLangFlag === 1) ? `${__dirname}/template/Solution.java` : `${__dirname}/template/Template`;
+ipcMain.on("set-sol-local", (event, solLangExt) => {
+  const path = `${__dirname}/template/Template.${solLangExt}`;
   fileSystem.readFile(path, "utf8", (err, data) => {
     mainWindow.webContents.send("sol-template", data);
   });

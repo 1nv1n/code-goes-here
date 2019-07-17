@@ -47,7 +47,7 @@ function closeApp() {
 function setLocalDefault() {
   document.getElementById("setLocalDefBtn").classList.add("is-loading");
   _globalIPCRenderer.send("set-desc-local");
-  _globalIPCRenderer.send("set-sol-local", 1);
+  _globalIPCRenderer.send("set-sol-local", currLang[3]);
 }
 
 /**
