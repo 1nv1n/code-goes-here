@@ -63,14 +63,14 @@
     }
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.7.2",
-    "bulma": "^0.7.4",
+    "@fortawesome/fontawesome-free": "^5.9.0",
+    "bulma": "^0.7.5",
     "electron-compile": "^6.4.4",
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
-    "github-api": "^3.0.0",
+    "github-api": "^3.2.2",
     "leetcode-cli": "^2.6.1",
-    "monaco-editor": "^0.16.0",
+    "monaco-editor": "^0.17.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
@@ -80,10 +80,10 @@
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^5.2.4",
     "electron-prebuilt-compile": "4.0.0",
-    "eslint": "^5.15.1",
+    "eslint": "^6.0.1",
     "eslint-config-airbnb": "^17",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.4"
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.2"
   }
 }
